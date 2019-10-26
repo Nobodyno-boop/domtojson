@@ -1,0 +1,38 @@
+{
+  "name": "domtojson",
+  "version": "0.1.0",
+  "description": "simple domtojson",
+  "main": "dist/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "type": "dist/index.d.ts",
+  "scripts": {
+    "clean": "rm -r dist",
+    "start": "parcel test/test.html",
+    "build-prod": "parcel build src/index.ts && tsc -d --emitDeclarationOnly"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Poulpinounette/domtojson.git"
+  },
+  "keywords": [
+    "domparser",
+    "json",
+    "dom2json",
+    "json2dom"
+  ],
+  "author": "poulpi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Poulpinounette/domtojson/issues"
+  },
+  "homepage": "https://github.com/Poulpinounette/domtojson#readme",
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4",
+    "typescript": "^3.6.4"
+  }
+}

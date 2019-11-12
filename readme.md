@@ -3,6 +3,7 @@
 > npm i @poulpi/domtojson
 
 
+## [Or use CDN (Click on me :rice_ball: )](unpkg.com/@poulpi/domtojson@latest/dist/index.js)
 
 Sample use :
 === 
@@ -81,3 +82,7 @@ he include only style for the node div.
 
 
 MIT LICENSE.
+
+
+
+(Article medium.)

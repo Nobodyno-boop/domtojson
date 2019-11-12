@@ -1,16 +1,17 @@
 {
   "name": "@poulpi/domtojson",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "simple domtojson",
-  "main": "dist/index.js",
+  "main": "dist/index.umd.js",
+  "module": "dist/index.mjs.js",
   "directories": {
     "test": "test"
   },
-  "type": "dist/index.d.ts",
+  "types": "types/",
   "scripts": {
-    "clean": "rm -r dist",
+    "clean": "rm -r dist && rm -r types",
     "start": "parcel test/test.html",
-    "build-prod": "parcel build src/index.ts && tsc -d --emitDeclarationOnly"
+    "build-prod": "parcel build src/index.ts --global DTM && parcel build src/index.ts -t node -o index.umd.js && parcel build src/index.ts --bundle-node-modules -o index.mjs.js && tsc src/index.ts --outDir types/ -d --emitDeclarationOnly"
   },
   "engines": {
     "node": ">=0.10.0"

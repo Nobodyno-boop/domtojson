@@ -141,7 +141,6 @@ export default class Dom {
     }
 
     getJson() : Object{
-        let o = Object.assign({}, this.tmpJson);
-        return o;
+        return this.tmpJson;
     }
 }

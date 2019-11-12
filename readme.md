@@ -1,7 +1,8 @@
 # DomToJson 
 
-Simple parse.
-Todo: need type.
+> npm i @poulpi/domtojson
+
+
 
 Sample use :
 === 

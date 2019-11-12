@@ -1,5 +1,5 @@
 {
-  "name": "domtojson",
+  "name": "@poulpi/domtojson",
   "version": "0.1.0",
   "description": "simple domtojson",
   "main": "dist/index.js",

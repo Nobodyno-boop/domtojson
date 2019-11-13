@@ -5,7 +5,7 @@ import { Json } from "./lib/json";
 
 export interface IParser{
     toJson(element:HTMLElement) : Object
-    toDom(json:[], nodeName:string): HTMLElement
+    toDom(json:[], element?:HTMLElement): HTMLElement
     newInstance(): IParser
 }
 
@@ -30,10 +30,16 @@ export class Parser implements IParser {
     }
     
 
-    toDom(json:[], nodeName:string = "div"): HTMLElement {
+    toDom(json:[], element?:HTMLElement): HTMLElement {
         let dom = new Json(json);
-        let d = document.createElement(nodeName);
-        dom.getElement().forEach(x => {d.appendChild(x)});
+        let d: HTMLElement;
+        if(typeof element === "undefined"){
+           d = document.createElement("div");
+            dom.getElement().forEach(x => {d.appendChild(x)});
+        } else {
+            d = element;
+            dom.getElement().forEach(x => {d.appendChild(x)});
+        }
         return d;
     }
 

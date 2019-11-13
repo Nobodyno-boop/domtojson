@@ -1,6 +1,6 @@
 {
   "name": "@poulpi/domtojson",
-  "version": "0.1.1",
+  "version": "0.1.22",
   "description": "simple domtojson",
   "main": "dist/index.umd.js",
   "module": "dist/index.mjs.js",

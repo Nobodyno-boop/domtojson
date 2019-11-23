@@ -35,10 +35,10 @@ export class Parser implements IParser {
         let d: HTMLElement;
         if(typeof element === "undefined"){
            d = document.createElement("div");
-            dom.getElement().forEach(x => {d.appendChild(x)});
+            dom.getElement().forEach((x:any) => {d.appendChild(x)});
         } else {
             d = element;
-            dom.getElement().forEach(x => {d.appendChild(x)});
+            dom.getElement().forEach((x:any) => {d.appendChild(x)});
         }
         return d;
     }

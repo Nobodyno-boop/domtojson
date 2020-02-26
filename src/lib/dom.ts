@@ -140,7 +140,7 @@ export default class Dom {
         return map.length === 0 ? null : map[0]
     }
 
-    getJson() : Object{
+    getJson() : Object {
         let o = Object.assign({}, this.tmpJson);
         return o;
     }

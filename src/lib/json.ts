@@ -20,9 +20,7 @@ export class Json {
                 d.textContent = obj["text"]
             } 
         }
-        if(base === null){
-            this.tmp.push(d);
-        }
+
         if(obj["attr"] !== undefined){
             obj["attr"].forEach((x:any) => {d.setAttribute(x["name"], x["value"])})
         }
@@ -33,6 +31,8 @@ export class Json {
 
         if(base !== null){
             base.appendChild(d);
+        } else {
+            this.tmp.push(d);
         }
     }
 

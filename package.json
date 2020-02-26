@@ -8,7 +8,7 @@
   },
   "type": "dist/index.d.ts",
   "scripts": {
-    "clean": "rm -r dist",
+    "clear": "rm -r dist && rm -r .cache",
     "start": "parcel test/test.html",
     "build-prod": "parcel build src/index.ts && tsc -d --emitDeclarationOnly"
   },
@@ -32,6 +32,7 @@
   },
   "homepage": "https://github.com/Poulpinounette/domtojson#readme",
   "devDependencies": {
+    "@types/node": "^13.7.5",
     "parcel-bundler": "^1.12.4",
     "typescript": "^3.6.4"
   }

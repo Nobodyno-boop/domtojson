@@ -28,12 +28,12 @@ export class Parser implements IParser {
         let json = new Dom(element, this.config);
         return json.getJson();
     }
-    
+
 
     toDom(json:[], nodeName:string = "div"): HTMLElement {
         let dom = new Json(json);
         let d = document.createElement(nodeName);
-        dom.getElement().forEach(x => {d.appendChild(x)});
+        dom.getElement().forEach((x:any) => {d.appendChild(x)});
         return d;
     }
 

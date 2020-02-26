@@ -1,7 +1,6 @@
 # DomToJson 
 
-Simple parse.
-Todo: need type.
+Simple DOM<->JSON
 
 Sample use :
 === 
@@ -60,8 +59,7 @@ he exclude only style for the node div and add everyone else.
 ```javascript 
     let dtm = DTM.newInstance();
     dtm.api(api => {
-        api.set({node: "div", exclude: ["style"]})
-     return api;
+        return api.set({node: "div", exclude: ["style"]})
     })
     console.log(dom)
 ```
@@ -72,8 +70,7 @@ he include only style for the node div.
 ```javascript 
     let dtm = DTM.newInstance();
     dtm.api(api => {
-        api.set({node: "div", include: ["style"]})
-     return api;
+        return api.set({node: "div", include: ["style"]})
     })
     console.log(dom)
 ```

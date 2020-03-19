@@ -1,10 +1,21 @@
 import { Parser } from './../parser';
 import { ParserConfig } from "../config";
+import Emitter from '../utils';
+
+
+interface IOveride {
+    "overide": string
+}
+
+class Event extends Emitter<IOveride> {
+
+}
+
 
 export default class Dom {
     private tmpElement: any[];
     private tmpJson: any[];
-
+    private event = new Event();
     constructor(private el:HTMLElement, protected config:ParserConfig){
         this.tmpElement = [];
         this.tmpJson = [];
@@ -13,19 +24,25 @@ export default class Dom {
     }
 
     init(){
-        this.el.addEventListener("override", (x:any) => {
+        this.event.on("overide", (x) => {
             let el = this.getElement(x["detail"]["v"]);
             if(el === null){
                 console.error("[!Error!] Cannot catch HTMLELEMENT ! ")
             }
-            this.override(x["detail"]["o"], el);
+            this.overide(x["detail"]["o"], el);
         });
+
+        var am = this.el.children;
+        var bm = Array.from(this.el.children);
+        console.log(am);
+        console.log(bm);
+        
         //TODO: chekc if has children
         if(this.el.children.length >=1){
             this.pre(this.el.children)
             this.el.childNodes.forEach(x => {this.parse(x)})
         } else {
-            throw new Error("[DTM] No children ! ")
+            throw new Error("[DTM] The element have no children"+ this.el)
         }
     }
 
@@ -40,7 +57,7 @@ export default class Dom {
         }
     }
 
-    private override(obj:any, v:Element){
+    private overide(obj:any, v:Element){
         let attr = [];
         if(this.config.isApi()){
             let co = this.config.getObj().filter(x => x.node.toLowerCase() === v.nodeName.toLowerCase());
@@ -48,6 +65,7 @@ export default class Dom {
                 let m = co[0];
                 let bin = typeof m["include"] !== "undefined";
                 let bex = typeof m["exclude"] !== "undefined";
+
                 for(let i =0; i<v.attributes.length; i++){
                     let va = v.attributes.item(i);
                     if(bin && bex){
@@ -99,8 +117,7 @@ export default class Dom {
         }
     
         if(v.nodeName !== "#text"){
-            let e = new CustomEvent("override", {"detail": {"v": v, "o": obj}})
-            this.el.dispatchEvent(e)
+            this.event.emit("overide", {"detail": {"v": v, "o": obj}})
         }
         if(v.hasChildNodes()){
     

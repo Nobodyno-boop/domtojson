@@ -9,6 +9,7 @@
         "moduleResolution": "node",
         "target": "es5",
         "allowJs": true,
+        "strictNullChecks": false
     },
     "include": [
         "./src/**/*"

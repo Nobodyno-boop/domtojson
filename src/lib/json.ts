@@ -3,8 +3,8 @@ export class Json {
     private tmp:any = []
 
     constructor(private json:[]){
-        for(let i = 0; i < Object.keys(this.json).length; i++){
-            this.parse(this.json[i], null)
+        for(let j in this.json){
+            this.parse(j, null)
         }
     }
 

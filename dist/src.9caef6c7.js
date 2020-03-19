@@ -227,6 +227,63 @@ function () {
 }();
 
 exports.ParserAPI = ParserAPI;
+},{}],"../src/utils.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+//based on https://gist.github.com/rsms/3744301784eb3af8ed80bc746bef5eeb
+var __spreadArrays = void 0 && (void 0).__spreadArrays || function () {
+  for (var s = 0, i = 0, il = arguments.length; i < il; i++) {
+    s += arguments[i].length;
+  }
+
+  for (var r = Array(s), k = 0, i = 0; i < il; i++) {
+    for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++) {
+      r[k] = a[j];
+    }
+  }
+
+  return r;
+};
+
+var Emitter =
+/** @class */
+function () {
+  function Emitter() {
+    this.events = new Map();
+  }
+
+  Emitter.prototype.on = function (event, listener) {
+    if (this.events.has(event)) {
+      this.events.get(event).push(listener);
+    } else {
+      this.events.set(event, [listener]);
+    }
+  };
+
+  Emitter.prototype.emit = function (event) {
+    var args = [];
+
+    for (var _i = 1; _i < arguments.length; _i++) {
+      args[_i - 1] = arguments[_i];
+    }
+
+    if (this.events.has(event)) {
+      this.events.get(event).forEach(function (x) {
+        return x.call.apply(x, __spreadArrays([null], args));
+      });
+    }
+  };
+
+  return Emitter;
+}();
+
+var _default = Emitter;
+exports.default = _default;
 },{}],"../src/lib/dom.ts":[function(require,module,exports) {
 "use strict";
 
@@ -235,7 +292,49 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _utils = _interopRequireDefault(require("../utils"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+var __extends = void 0 && (void 0).__extends || function () {
+  var _extendStatics = function extendStatics(d, b) {
+    _extendStatics = Object.setPrototypeOf || {
+      __proto__: []
+    } instanceof Array && function (d, b) {
+      d.__proto__ = b;
+    } || function (d, b) {
+      for (var p in b) {
+        if (b.hasOwnProperty(p)) d[p] = b[p];
+      }
+    };
+
+    return _extendStatics(d, b);
+  };
+
+  return function (d, b) {
+    _extendStatics(d, b);
+
+    function __() {
+      this.constructor = d;
+    }
+
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+}();
+
+var Event =
+/** @class */
+function (_super) {
+  __extends(Event, _super);
+
+  function Event() {
+    return _super !== null && _super.apply(this, arguments) || this;
+  }
+
+  return Event;
+}(_utils.default);
 
 var Dom =
 /** @class */
@@ -243,6 +342,7 @@ function () {
   function Dom(el, config) {
     this.el = el;
     this.config = config;
+    this.event = new Event();
     this.tmpElement = [];
     this.tmpJson = [];
     this.init();
@@ -251,15 +351,19 @@ function () {
   Dom.prototype.init = function () {
     var _this = this;
 
-    this.el.addEventListener("override", function (x) {
+    this.event.on("overide", function (x) {
       var el = _this.getElement(x["detail"]["v"]);
 
       if (el === null) {
         console.error("[!Error!] Cannot catch HTMLELEMENT ! ");
       }
 
-      _this.override(x["detail"]["o"], el);
-    }); //TODO: chekc if has children
+      _this.overide(x["detail"]["o"], el);
+    });
+    var am = this.el.children;
+    var bm = Array.from(this.el.children);
+    console.log(am);
+    console.log(bm); //TODO: chekc if has children
 
     if (this.el.children.length >= 1) {
       this.pre(this.el.children);
@@ -267,7 +371,7 @@ function () {
         _this.parse(x);
       });
     } else {
-      throw new Error("[DTM] No children ! ");
+      throw new Error("[DTM] The element have no children" + this.el);
     }
   };
 
@@ -286,7 +390,7 @@ function () {
     }
   };
 
-  Dom.prototype.override = function (obj, v) {
+  Dom.prototype.overide = function (obj, v) {
     var attr = [];
 
     if (this.config.isApi()) {
@@ -395,13 +499,12 @@ function () {
     }
 
     if (v.nodeName !== "#text") {
-      var e = new CustomEvent("override", {
+      this.event.emit("overide", {
         "detail": {
           "v": v,
           "o": obj
         }
       });
-      this.el.dispatchEvent(e);
     }
 
     if (v.hasChildNodes()) {
@@ -451,7 +554,7 @@ function () {
 
 var _default = Dom;
 exports.default = _default;
-},{}],"../src/lib/json.ts":[function(require,module,exports) {
+},{"../utils":"../src/utils.ts"}],"../src/lib/json.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -466,8 +569,8 @@ function () {
     this.json = json;
     this.tmp = [];
 
-    for (var i = 0; i < Object.keys(this.json).length; i++) {
-      this.parse(this.json[i], null);
+    for (var j in this.json) {
+      this.parse(j, null);
     }
   }
 
@@ -491,10 +594,6 @@ function () {
       }
     }
 
-    if (base === null) {
-      this.tmp.push(d);
-    }
-
     if (obj["attr"] !== undefined) {
       obj["attr"].forEach(function (x) {
         d.setAttribute(x["name"], x["value"]);
@@ -509,6 +608,8 @@ function () {
 
     if (base !== null) {
       base.appendChild(d);
+    } else {
+      this.tmp.push(d);
     }
   };
 
@@ -590,7 +691,14 @@ if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object"
   window["DTM"] = new _parser.Parser();
 } else {
   module.exports = new _parser.Parser();
-}
+} // interface Try{
+//     "try": String
+// }
+// class Foo extends Emitter<Try> {
+// }
+// let f = new Foo();
+// f.on("try", (msg, a, b) => console.log(msg, b));
+// f.emit('try', "Ma bite", " est", " un volcan")
 },{"./parser":"../src/parser.ts"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -619,7 +727,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44907" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "42721" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

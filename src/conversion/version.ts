@@ -8,20 +8,74 @@
 // TODO: finish it 
 interface patch{
     "rule":RegExp,
-    "resolve": {(resolve:string) : string},
+    "resolve": {(resolve:string, patch:patch) : string},
     "version": number,
-    "to"?: number
+    "to"?: number,
+    "word": string
 }
 
 
-class Version {
-    private patchs:patch[];
+export class Version {
+    private json:patch[];
+    private dom:patch[];
+    public actual:number = 2.0
     
     constructor(){
+        //toJson
+        this.json = [
+            {
+                "rule": /(\s{5,}|\t{2,})/g,
+                "version": 2.0,
+                "resolve": (s, rule) => this.fix(s, rule),
+                word: "⛏($)" // &#9935;
+            }
+        ]
+
+
         // this.patchs = [
         //     {
         //         ""
         //     }
         // ]
     }
+
+
+    private matchAll(s:string, regex:RegExp) {
+        let m;
+        let p=[];
+        while ((m = regex.exec(s)) !== null) {
+            // This is necessary to avoid infinite loops with zero-width matches
+            if (m.index === regex.lastIndex) {
+                regex.lastIndex++;
+            }
+            
+       
+            p.push(m);
+        }
+        return p;
+    }
+    // https://stackoverflow.com/questions/1431094/how-do-i-replace-a-character-at-a-particular-index-in-javascript?rq=1
+    private replaceAt(string: string, obj:any, replace:string){
+        return string.substr(0, obj['index']) + string.substr(obj['index'], obj['0'].length).replace(obj['0'], replace);
+    }
+    private fix(s:string, path:patch):string{
+        let p = this.matchAll(s, path.rule);
+        p.forEach(x => {
+            s = this.replaceAt(s, x, path.word.replace('$', String(x[0].length)));
+        })
+
+        return s;
+    }
+
+    fixjson(s:string): string{
+        this.json.forEach(x => {
+            if(x.version === this.actual || (x.to !== 0 || x.to <= this.actual) ){
+                s = x.resolve(s, x)
+            }
+        })
+
+        return s;
+    }
 }
+
+

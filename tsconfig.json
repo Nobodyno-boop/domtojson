@@ -6,8 +6,8 @@
         "noImplicitReturns": true,
         "noImplicitAny": true,
         "module": "es6",
-        "moduleResolution": "node",
-        "target": "es5",
+        "moduleResolution": "Node",
+        "target": "ESNext",
         "allowJs": true,
         "strictNullChecks": false
     },

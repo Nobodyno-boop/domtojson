@@ -1,6 +1,7 @@
 import { Parser } from './../parser';
 import { ParserConfig } from "../config";
 import Emitter from '../utils';
+import { Version } from '../conversion/version';
 
 
 interface IOveride {
@@ -16,9 +17,10 @@ export default class Dom {
     private tmpElement: any[];
     private tmpJson: any[];
     private event = new Event();
+    private version = new Version();
     constructor(private el:HTMLElement, protected config:ParserConfig){
         this.tmpElement = [];
-        this.tmpJson = [];
+        this.tmpJson = [{version: this.version.actual}];
         this.init()
 
     }
@@ -111,6 +113,7 @@ export default class Dom {
     private parse(v:Node, base:any = null) {
         let nodeName = v.nodeName.toLowerCase();
         let obj:any = {};
+        obj['version'];
         obj['node'] = nodeName;
         if(base === null && nodeName !== "#text"){
             this.tmpJson.push(obj)
@@ -128,7 +131,8 @@ export default class Dom {
           
           let text = v.childNodes.item(0);
           if(text.nodeName === "#text"){
-            obj["text"] = text.textContent;
+                            
+            obj["text"] = this.version.fixjson(text.textContent);
           }
     
           if(v.childNodes.length >= 1){
@@ -139,7 +143,7 @@ export default class Dom {
           if(base["text"] === v.textContent){
             delete base["childs"];
           } else {
-            obj["text"] = v.textContent;
+            obj["text"] = this.version.fixjson(v.textContent);
             base["childs"].push(obj) 
           }
     
@@ -158,7 +162,6 @@ export default class Dom {
     }
 
     getJson() : Object {
-        let o = Object.assign({}, this.tmpJson);
-        return o;
+        return {...this.tmpJson};
     }
 }

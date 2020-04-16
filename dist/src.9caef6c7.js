@@ -125,64 +125,65 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.ParserConfig = void 0;
 
-var ParserConfig =
-/** @class */
-function () {
-  function ParserConfig(api) {
-    if (api === void 0) {
-      api = false;
-    }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var ParserConfig = /*#__PURE__*/function () {
+  function ParserConfig() {
+    var api = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
+    _classCallCheck(this, ParserConfig);
 
     this.api = api;
     this.obj = [];
     this.exc = [];
   }
 
-  ParserConfig.prototype.set = function (obj) {
-    this._set(obj);
+  _createClass(ParserConfig, [{
+    key: "set",
+    value: function set(obj) {
+      this._set(obj);
 
-    return this;
-  };
-
-  ParserConfig.prototype._set = function (obj) {
-    if (this.obj) this.obj.push(obj);
-  };
-
-  ParserConfig.prototype._excludeNode = function () {
-    var _a;
-
-    var node = [];
-
-    for (var _i = 0; _i < arguments.length; _i++) {
-      node[_i] = arguments[_i];
+      return this;
     }
-
-    (_a = this.exc).push.apply(_a, node);
-  };
-
-  ParserConfig.prototype.getObj = function () {
-    return this.obj;
-  };
-
-  ParserConfig.prototype.isApi = function () {
-    return this.api;
-  };
-
-  ParserConfig.prototype.isExclude = function (node) {
-    return this.exc.includes(node);
-  };
-
-  ParserConfig.prototype.excludeNode = function () {
-    var node = [];
-
-    for (var _i = 0; _i < arguments.length; _i++) {
-      node[_i] = arguments[_i];
+  }, {
+    key: "_set",
+    value: function _set(obj) {
+      if (this.obj) this.obj.push(obj);
     }
+  }, {
+    key: "_excludeNode",
+    value: function _excludeNode() {
+      var _this$exc;
 
-    this._excludeNode.apply(this, node);
+      (_this$exc = this.exc).push.apply(_this$exc, arguments);
+    }
+  }, {
+    key: "getObj",
+    value: function getObj() {
+      return this.obj;
+    }
+  }, {
+    key: "isApi",
+    value: function isApi() {
+      return this.api;
+    }
+  }, {
+    key: "isExclude",
+    value: function isExclude(node) {
+      return this.exc.includes(node);
+    }
+  }, {
+    key: "excludeNode",
+    value: function excludeNode() {
+      this._excludeNode.apply(this, arguments);
 
-    return this;
-  };
+      return this;
+    }
+  }]);
 
   return ParserConfig;
 }();
@@ -196,32 +197,36 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.ParserAPI = void 0;
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 // Maybe make other custom function.
-var ParserAPI =
-/** @class */
-function () {
+var ParserAPI = /*#__PURE__*/function () {
   function ParserAPI(config) {
+    _classCallCheck(this, ParserAPI);
+
     this.config = config;
   }
 
-  ParserAPI.prototype.set = function (obj) {
-    this.config.set(obj);
-    return this;
-  };
-
-  ParserAPI.prototype.excludeNode = function () {
-    var _a;
-
-    var node = [];
-
-    for (var _i = 0; _i < arguments.length; _i++) {
-      node[_i] = arguments[_i];
+  _createClass(ParserAPI, [{
+    key: "set",
+    value: function set(obj) {
+      this.config.set(obj);
+      return this;
     }
+  }, {
+    key: "excludeNode",
+    value: function excludeNode() {
+      var _this$config;
 
-    (_a = this.config).excludeNode.apply(_a, node);
+      (_this$config = this.config).excludeNode.apply(_this$config, arguments);
 
-    return this;
-  };
+      return this;
+    }
+  }]);
 
   return ParserAPI;
 }();
@@ -235,55 +240,137 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 //based on https://gist.github.com/rsms/3744301784eb3af8ed80bc746bef5eeb
-var __spreadArrays = void 0 && (void 0).__spreadArrays || function () {
-  for (var s = 0, i = 0, il = arguments.length; i < il; i++) {
-    s += arguments[i].length;
-  }
-
-  for (var r = Array(s), k = 0, i = 0; i < il; i++) {
-    for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++) {
-      r[k] = a[j];
-    }
-  }
-
-  return r;
-};
-
-var Emitter =
-/** @class */
-function () {
+var Emitter = /*#__PURE__*/function () {
   function Emitter() {
+    _classCallCheck(this, Emitter);
+
     this.events = new Map();
   }
 
-  Emitter.prototype.on = function (event, listener) {
-    if (this.events.has(event)) {
-      this.events.get(event).push(listener);
-    } else {
-      this.events.set(event, [listener]);
+  _createClass(Emitter, [{
+    key: "on",
+    value: function on(event, listener) {
+      if (this.events.has(event)) {
+        this.events.get(event).push(listener);
+      } else {
+        this.events.set(event, [listener]);
+      }
     }
-  };
+  }, {
+    key: "emit",
+    value: function emit(event) {
+      for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+        args[_key - 1] = arguments[_key];
+      }
 
-  Emitter.prototype.emit = function (event) {
-    var args = [];
-
-    for (var _i = 1; _i < arguments.length; _i++) {
-      args[_i - 1] = arguments[_i];
+      if (this.events.has(event)) {
+        this.events.get(event).forEach(function (x) {
+          return x.call.apply(x, [null].concat(args));
+        });
+      }
     }
-
-    if (this.events.has(event)) {
-      this.events.get(event).forEach(function (x) {
-        return x.call.apply(x, __spreadArrays([null], args));
-      });
-    }
-  };
+  }]);
 
   return Emitter;
 }();
 
-var _default = Emitter;
-exports.default = _default;
+exports.default = Emitter;
+},{}],"../src/conversion/version.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Version = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Version = /*#__PURE__*/function () {
+  function Version() {
+    var _this = this;
+
+    _classCallCheck(this, Version);
+
+    this.actual = 2.0; //toJson
+
+    this.json = [{
+      "rule": /(\s{5,}|\t{2,})/g,
+      "version": 2.0,
+      "resolve": function resolve(s, rule) {
+        return _this.fix(s, rule);
+      },
+      word: "⛏($)" // &#9935;
+
+    }]; // this.patchs = [
+    //     {
+    //         ""
+    //     }
+    // ]
+  }
+
+  _createClass(Version, [{
+    key: "matchAll",
+    value: function matchAll(s, regex) {
+      var m;
+      var p = [];
+
+      while ((m = regex.exec(s)) !== null) {
+        // This is necessary to avoid infinite loops with zero-width matches
+        if (m.index === regex.lastIndex) {
+          regex.lastIndex++;
+        }
+
+        p.push(m);
+      }
+
+      return p;
+    } // https://stackoverflow.com/questions/1431094/how-do-i-replace-a-character-at-a-particular-index-in-javascript?rq=1
+
+  }, {
+    key: "replaceAt",
+    value: function replaceAt(string, obj, replace) {
+      return string.substr(0, obj['index']) + string.substr(obj['index'], obj['0'].length).replace(obj['0'], replace);
+    }
+  }, {
+    key: "fix",
+    value: function fix(s, path) {
+      var _this2 = this;
+
+      var p = this.matchAll(s, path.rule);
+      p.forEach(function (x) {
+        s = _this2.replaceAt(s, x, path.word.replace('$', String(x[0].length)));
+      });
+      return s;
+    }
+  }, {
+    key: "fixjson",
+    value: function fixjson(s) {
+      var _this3 = this;
+
+      this.json.forEach(function (x) {
+        if (x.version === _this3.actual || x.to !== 0 || x.to <= _this3.actual) {
+          s = x.resolve(s, x);
+        }
+      });
+      return s;
+    }
+  }]);
+
+  return Version;
+}();
+
+exports.Version = Version;
 },{}],"../src/lib/dom.ts":[function(require,module,exports) {
 "use strict";
 
@@ -294,267 +381,276 @@ exports.default = void 0;
 
 var _utils = _interopRequireDefault(require("../utils"));
 
+var _version = require("../conversion/version");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
-var __extends = void 0 && (void 0).__extends || function () {
-  var _extendStatics = function extendStatics(d, b) {
-    _extendStatics = Object.setPrototypeOf || {
-      __proto__: []
-    } instanceof Array && function (d, b) {
-      d.__proto__ = b;
-    } || function (d, b) {
-      for (var p in b) {
-        if (b.hasOwnProperty(p)) d[p] = b[p];
-      }
-    };
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
-    return _extendStatics(d, b);
-  };
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-  return function (d, b) {
-    _extendStatics(d, b);
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-    function __() {
-      this.constructor = d;
-    }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-}();
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-var Event =
-/** @class */
-function (_super) {
-  __extends(Event, _super);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+var Event = /*#__PURE__*/function (_Emitter) {
+  _inherits(Event, _Emitter);
+
+  var _super = _createSuper(Event);
 
   function Event() {
-    return _super !== null && _super.apply(this, arguments) || this;
+    _classCallCheck(this, Event);
+
+    return _super.apply(this, arguments);
   }
 
   return Event;
 }(_utils.default);
 
-var Dom =
-/** @class */
-function () {
+var Dom = /*#__PURE__*/function () {
   function Dom(el, config) {
+    _classCallCheck(this, Dom);
+
     this.el = el;
     this.config = config;
     this.event = new Event();
+    this.version = new _version.Version();
     this.tmpElement = [];
-    this.tmpJson = [];
+    this.tmpJson = [{
+      version: this.version.actual
+    }];
     this.init();
   }
 
-  Dom.prototype.init = function () {
-    var _this = this;
+  _createClass(Dom, [{
+    key: "init",
+    value: function init() {
+      var _this = this;
 
-    this.event.on("overide", function (x) {
-      var el = _this.getElement(x["detail"]["v"]);
+      this.event.on("overide", function (x) {
+        var el = _this.getElement(x["detail"]["v"]);
 
-      if (el === null) {
-        console.error("[!Error!] Cannot catch HTMLELEMENT ! ");
-      }
-
-      _this.overide(x["detail"]["o"], el);
-    });
-    var am = this.el.children;
-    var bm = Array.from(this.el.children);
-    console.log(am);
-    console.log(bm); //TODO: chekc if has children
-
-    if (this.el.children.length >= 1) {
-      this.pre(this.el.children);
-      this.el.childNodes.forEach(function (x) {
-        _this.parse(x);
-      });
-    } else {
-      throw new Error("[DTM] The element have no children" + this.el);
-    }
-  };
-
-  Dom.prototype.pre = function (h, base) {
-    if (base === void 0) {
-      base = false;
-    }
-
-    for (var index = 0; index < h.length; index++) {
-      var element = h[index];
-      this.tmpElement.push(element);
-
-      if (element.children.length > 0) {
-        this.pre(element.children, true);
-      }
-    }
-  };
-
-  Dom.prototype.overide = function (obj, v) {
-    var attr = [];
-
-    if (this.config.isApi()) {
-      var co = this.config.getObj().filter(function (x) {
-        return x.node.toLowerCase() === v.nodeName.toLowerCase();
-      });
-
-      if (co.length === 1) {
-        var m = co[0];
-        var bin = typeof m["include"] !== "undefined";
-        var bex = typeof m["exclude"] !== "undefined";
-
-        var _loop_1 = function _loop_1(i) {
-          var va = v.attributes.item(i);
-
-          if (bin && bex) {
-            var xin = m["include"].filter(function (x) {
-              return x.toLowerCase() === va.name.toLowerCase();
-            });
-            var xen = m["exclude"].filter(function (x) {
-              return x.toLowerCase() === va.name.toLowerCase();
-            });
-
-            if (xin.length > 1 && xen.length >= 1) {
-              throw new Error("[DomToJson] " + va.name + "is on exclude and include !");
-            }
-
-            if (xin.length >= 1) {
-              attr.push({
-                name: va.name,
-                value: va.value
-              });
-            }
-
-            if (xen.length >= 1) {
-              attr.push({
-                name: va.name,
-                value: va.value
-              });
-            }
-          }
-
-          if (bin) {
-            var xin = m["include"].filter(function (x) {
-              return x.toLowerCase() === va.name.toLowerCase();
-            });
-
-            if (xin) {
-              attr.push({
-                name: va.name,
-                value: va.value
-              });
-            }
-          }
-
-          if (bex) {
-            var xen = m["exclude"].filter(function (x) {
-              return x.toLowerCase() === va.name.toLowerCase();
-            });
-
-            if (!(xen.length >= 1)) {
-              attr.push({
-                name: va.name,
-                value: va.value
-              });
-            } else return {
-              value: void 0
-            };
-          }
-        };
-
-        for (var i = 0; i < v.attributes.length; i++) {
-          var state_1 = _loop_1(i);
-
-          if (_typeof(state_1) === "object") return state_1.value;
+        if (el === null) {
+          console.error("[!Error!] Cannot catch HTMLELEMENT ! ");
         }
-      }
-    } else {
-      for (var i = 0; i < v.attributes.length; i++) {
-        var va = v.attributes.item(i);
-        attr.push({
-          name: va.name,
-          value: va.value
-        });
-      }
-    }
 
-    if (attr.length >= 1) {
-      obj["attr"] = attr;
-    }
-  };
-
-  Dom.prototype.parse = function (v, base) {
-    var _this = this;
-
-    if (base === void 0) {
-      base = null;
-    }
-
-    var nodeName = v.nodeName.toLowerCase();
-    var obj = {};
-    obj['node'] = nodeName;
-
-    if (base === null && nodeName !== "#text") {
-      this.tmpJson.push(obj);
-    }
-
-    if (v.nodeName !== "#text") {
-      this.event.emit("overide", {
-        "detail": {
-          "v": v,
-          "o": obj
-        }
+        _this.overide(x["detail"]["o"], el);
       });
-    }
+      var am = this.el.children;
+      var bm = Array.from(this.el.children);
+      console.log(am);
+      console.log(bm); //TODO: chekc if has children
 
-    if (v.hasChildNodes()) {
-      if (base != null) {
-        if (typeof base["childs"] === "undefined") base["childs"] = [];
-        base["childs"].push(obj);
-      }
-
-      var text = v.childNodes.item(0);
-
-      if (text.nodeName === "#text") {
-        obj["text"] = text.textContent;
-      }
-
-      if (v.childNodes.length >= 1) {
-        obj["childs"] = [];
-        v.childNodes.forEach(function (x) {
-          _this.parse(x, obj);
+      if (this.el.children.length >= 1) {
+        this.pre(this.el.children);
+        this.el.childNodes.forEach(function (x) {
+          _this.parse(x);
         });
-      }
-    } else if (v.nodeName === "#text" && base != null) {
-      if (base["text"] === v.textContent) {
-        delete base["childs"];
       } else {
-        obj["text"] = v.textContent;
+        throw new Error("[DTM] The element have no children" + this.el);
+      }
+    }
+  }, {
+    key: "pre",
+    value: function pre(h) {
+      var base = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+      for (var index = 0; index < h.length; index++) {
+        var element = h[index];
+        this.tmpElement.push(element);
+
+        if (element.children.length > 0) {
+          this.pre(element.children, true);
+        }
+      }
+    }
+  }, {
+    key: "overide",
+    value: function overide(obj, v) {
+      var attr = [];
+
+      if (this.config.isApi()) {
+        var co = this.config.getObj().filter(function (x) {
+          return x.node.toLowerCase() === v.nodeName.toLowerCase();
+        });
+
+        if (co.length === 1) {
+          var m = co[0];
+          var bin = typeof m["include"] !== "undefined";
+          var bex = typeof m["exclude"] !== "undefined";
+
+          var _loop = function _loop(i) {
+            var va = v.attributes.item(i);
+
+            if (bin && bex) {
+              var xin = m["include"].filter(function (x) {
+                return x.toLowerCase() === va.name.toLowerCase();
+              });
+              var xen = m["exclude"].filter(function (x) {
+                return x.toLowerCase() === va.name.toLowerCase();
+              });
+
+              if (xin.length > 1 && xen.length >= 1) {
+                throw new Error("[DomToJson] " + va.name + "is on exclude and include !");
+              }
+
+              if (xin.length >= 1) {
+                attr.push({
+                  name: va.name,
+                  value: va.value
+                });
+              }
+
+              if (xen.length >= 1) {
+                attr.push({
+                  name: va.name,
+                  value: va.value
+                });
+              }
+            }
+
+            if (bin) {
+              var _xin = m["include"].filter(function (x) {
+                return x.toLowerCase() === va.name.toLowerCase();
+              });
+
+              if (_xin) {
+                attr.push({
+                  name: va.name,
+                  value: va.value
+                });
+              }
+            }
+
+            if (bex) {
+              var _xen = m["exclude"].filter(function (x) {
+                return x.toLowerCase() === va.name.toLowerCase();
+              });
+
+              if (!(_xen.length >= 1)) {
+                attr.push({
+                  name: va.name,
+                  value: va.value
+                });
+              } else return {
+                v: void 0
+              };
+            }
+          };
+
+          for (var i = 0; i < v.attributes.length; i++) {
+            var _ret = _loop(i);
+
+            if (_typeof(_ret) === "object") return _ret.v;
+          }
+        }
+      } else {
+        for (var _i = 0; _i < v.attributes.length; _i++) {
+          var va = v.attributes.item(_i);
+          attr.push({
+            name: va.name,
+            value: va.value
+          });
+        }
+      }
+
+      if (attr.length >= 1) {
+        obj["attr"] = attr;
+      }
+    }
+  }, {
+    key: "parse",
+    value: function parse(v) {
+      var _this2 = this;
+
+      var base = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+      var nodeName = v.nodeName.toLowerCase();
+      var obj = {};
+      obj['version'];
+      obj['node'] = nodeName;
+
+      if (base === null && nodeName !== "#text") {
+        this.tmpJson.push(obj);
+      }
+
+      if (v.nodeName !== "#text") {
+        this.event.emit("overide", {
+          "detail": {
+            "v": v,
+            "o": obj
+          }
+        });
+      }
+
+      if (v.hasChildNodes()) {
+        if (base != null) {
+          if (typeof base["childs"] === "undefined") base["childs"] = [];
+          base["childs"].push(obj);
+        }
+
+        var text = v.childNodes.item(0);
+
+        if (text.nodeName === "#text") {
+          obj["text"] = this.version.fixjson(text.textContent);
+        }
+
+        if (v.childNodes.length >= 1) {
+          obj["childs"] = [];
+          v.childNodes.forEach(function (x) {
+            _this2.parse(x, obj);
+          });
+        }
+      } else if (v.nodeName === "#text" && base != null) {
+        if (base["text"] === v.textContent) {
+          delete base["childs"];
+        } else {
+          obj["text"] = this.version.fixjson(v.textContent);
+          base["childs"].push(obj);
+        }
+      } else if (base != null) {
         base["childs"].push(obj);
       }
-    } else if (base != null) {
-      base["childs"].push(obj);
     }
-  };
-
-  Dom.prototype.getElement = function (n) {
-    var map = this.tmpElement.filter(function (x) {
-      return x.isSameNode(n);
-    });
-    return map.length === 0 ? null : map[0];
-  };
-
-  Dom.prototype.getJson = function () {
-    var o = Object.assign({}, this.tmpJson);
-    return o;
-  };
+  }, {
+    key: "getElement",
+    value: function getElement(n) {
+      var map = this.tmpElement.filter(function (x) {
+        return x.isSameNode(n);
+      });
+      return map.length === 0 ? null : map[0];
+    }
+  }, {
+    key: "getJson",
+    value: function getJson() {
+      return _objectSpread({}, this.tmpJson);
+    }
+  }]);
 
   return Dom;
 }();
 
-var _default = Dom;
-exports.default = _default;
-},{"../utils":"../src/utils.ts"}],"../src/lib/json.ts":[function(require,module,exports) {
+exports.default = Dom;
+},{"../utils":"../src/utils.ts","../conversion/version":"../src/conversion/version.ts"}],"../src/lib/json.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -562,10 +658,16 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Json = void 0;
 
-var Json =
-/** @class */
-function () {
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Json = /*#__PURE__*/function () {
   function Json(json) {
+    _classCallCheck(this, Json);
+
     this.json = json;
     this.tmp = [];
 
@@ -574,48 +676,49 @@ function () {
     }
   }
 
-  Json.prototype.parse = function (obj, base) {
-    var _this = this;
+  _createClass(Json, [{
+    key: "parse",
+    value: function parse(obj) {
+      var _this = this;
 
-    if (base === void 0) {
-      base = null;
-    }
+      var base = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+      var node = obj["node"];
+      var d = null;
 
-    var node = obj["node"];
-    var d = null;
+      if (node === "#text") {
+        d = document.createTextNode(obj["text"]);
+      } else {
+        d = document.createElement(node);
 
-    if (node === "#text") {
-      d = document.createTextNode(obj["text"]);
-    } else {
-      d = document.createElement(node);
+        if (obj["text"] !== undefined) {
+          d.textContent = obj["text"];
+        }
+      }
 
-      if (obj["text"] !== undefined) {
-        d.textContent = obj["text"];
+      if (obj["attr"] !== undefined) {
+        obj["attr"].forEach(function (x) {
+          d.setAttribute(x["name"], x["value"]);
+        });
+      }
+
+      if (obj['childs'] !== undefined) {
+        obj["childs"].forEach(function (x) {
+          _this.parse(x, d);
+        });
+      }
+
+      if (base !== null) {
+        base.appendChild(d);
+      } else {
+        this.tmp.push(d);
       }
     }
-
-    if (obj["attr"] !== undefined) {
-      obj["attr"].forEach(function (x) {
-        d.setAttribute(x["name"], x["value"]);
-      });
+  }, {
+    key: "getElement",
+    value: function getElement() {
+      return this.tmp;
     }
-
-    if (obj['childs'] !== undefined) {
-      obj["childs"].forEach(function (x) {
-        _this.parse(x, d);
-      });
-    }
-
-    if (base !== null) {
-      base.appendChild(d);
-    } else {
-      this.tmp.push(d);
-    }
-  };
-
-  Json.prototype.getElement = function () {
-    return this.tmp;
-  };
+  }]);
 
   return Json;
 }();
@@ -639,42 +742,51 @@ var _json = require("./lib/json");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Parser =
-/** @class */
-function () {
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Parser = /*#__PURE__*/function () {
   function Parser() {
+    _classCallCheck(this, Parser);
+
     this.config = new _config.ParserConfig();
   }
 
-  Parser.prototype.api = function (fn) {
-    var napi = fn(new _config2.ParserAPI(new _config.ParserConfig(true))); // fn((api:IParserConfig) => {
-    //     api.set({node:"img", "exclude": ["id"]})
-    // })
+  _createClass(Parser, [{
+    key: "api",
+    value: function api(fn) {
+      var napi = fn(new _config2.ParserAPI(new _config.ParserConfig(true))); // fn((api:IParserConfig) => {
+      //     api.set({node:"img", "exclude": ["id"]})
+      // })
 
-    this.config = napi.config;
-  };
-
-  Parser.prototype.toJson = function (element) {
-    var json = new _dom.default(element, this.config);
-    return json.getJson();
-  };
-
-  Parser.prototype.toDom = function (json, nodeName) {
-    if (nodeName === void 0) {
-      nodeName = "div";
+      this.config = napi.config;
     }
-
-    var dom = new _json.Json(json);
-    var d = document.createElement(nodeName);
-    dom.getElement().forEach(function (x) {
-      d.appendChild(x);
-    });
-    return d;
-  };
-
-  Parser.prototype.newInstance = function () {
-    return new Parser();
-  };
+  }, {
+    key: "toJson",
+    value: function toJson(element) {
+      var json = new _dom.default(element, this.config);
+      return json.getJson();
+    }
+  }, {
+    key: "toDom",
+    value: function toDom(json) {
+      var nodeName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "div";
+      var dom = new _json.Json(json);
+      var d = document.createElement(nodeName);
+      dom.getElement().forEach(function (x) {
+        d.appendChild(x);
+      });
+      return d;
+    }
+  }, {
+    key: "newInstance",
+    value: function newInstance() {
+      return new Parser();
+    }
+  }]);
 
   return Parser;
 }();
@@ -685,7 +797,7 @@ exports.Parser = Parser;
 
 var _parser = require("./parser");
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") {
   window["DTM"] = new _parser.Parser();
@@ -727,7 +839,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "42721" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41627" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

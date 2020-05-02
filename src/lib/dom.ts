@@ -20,7 +20,7 @@ export default class Dom {
     private version = new Version();
     constructor(private el:HTMLElement, protected config:ParserConfig){
         this.tmpElement = [];
-        this.tmpJson = [{version: this.version.actual}];
+        this.tmpJson = [{version: Version.actual}];
         this.init()
 
     }
@@ -36,8 +36,6 @@ export default class Dom {
 
         var am = this.el.children;
         var bm = Array.from(this.el.children);
-        console.log(am);
-        console.log(bm);
         
         //TODO: chekc if has children
         if(this.el.children.length >=1){

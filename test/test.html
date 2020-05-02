@@ -16,6 +16,12 @@
 
     <script src="../src/index.ts"></script>
     <button onclick="e()">Click</button>
+    <button onclick="m()">mirror try</button>
+
+    <div id="mirror">
+    </div>
+
+
 
     <script >
 
@@ -24,12 +30,18 @@
         // let d = DTM.toDom(p, "div")
         // // console.log(d)
         // document.body.append(d)
-
+        let a = JSON.parse(`{"0":{"version":2},"1":{"node":"p","text":"Lorem ipsum ","childs":[{"node":"em","attr":[{"name":"class","value":"class"}],"text":"dolor"},{"node":"#text","text":" sit amet,⛏(5)"},{"node":"b","text":"quo lorem cetero epicurei id"},{"node":"#text","text":", discere percipit qui ei. "}]},"2":{"node":"p","text":"Lorem ipsum dolor sit amet, quo lorem cetero epicurei id, discere percipit qui ei. "},"3":{"node":"div","attr":[{"name":"style","value":"color:red;"}],"childs":[{"node":"p","text":"Lorem ipsum dolor sit amet"},{"node":"br"},{"node":"#text","text":"⛏(9)"},{"node":"img","attr":[{"name":"id","value":"image"},{"name":"src","value":"https://picsum.photos/id/919/200/200"},{"name":"alt","value":"randomimg"}]}]}}`)
         function e(e){
 
             let n = DTM.newInstance();
-            let c = n.toJson(document.getElementById("app"));
-            console.log(`${JSON.stringify(c)}`)
+            a = n.toJson(document.getElementById("app"));
+            console.log(`${JSON.stringify(a)}`)
+        }
+        function m(e){
+
+            let n = DTM.newInstance();
+            let c = n.toDom(a, 'div')
+            document.getElementById("mirror").innerHTML = c.innerHTML
         }
     </script>
 

@@ -300,23 +300,32 @@ var Version = /*#__PURE__*/function () {
   function Version() {
     var _this = this;
 
+    var localVersion = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 2.0;
+
     _classCallCheck(this, Version);
 
-    this.actual = 2.0; //toJson
+    this.localVersion = localVersion; //toJson
 
     this.json = [{
       "rule": /(\s{5,}|\t{2,})/g,
       "version": 2.0,
+      "to": 2.0,
       "resolve": function resolve(s, rule) {
-        return _this.fix(s, rule);
+        return _this.fixJ(s, rule);
       },
       word: "⛏($)" // &#9935;
 
-    }]; // this.patchs = [
-    //     {
-    //         ""
-    //     }
-    // ]
+    }];
+    this.dom = [{
+      rule: /⛏\(([0-9]+)\)/g,
+      version: 2.0,
+      to: 2.0,
+      "resolve": function resolve(s, rule) {
+        return _this.fixD(s, rule);
+      },
+      word: "\xa0" // \xa0
+
+    }];
   }
 
   _createClass(Version, [{
@@ -335,6 +344,18 @@ var Version = /*#__PURE__*/function () {
       }
 
       return p;
+    }
+  }, {
+    key: "generateSpace",
+    value: function generateSpace(patch, i) {
+      var s = "";
+
+      for (var o = 0; 0 < i; o++) {
+        s += patch.word;
+      }
+
+      console.log(s);
+      return s;
     } // https://stackoverflow.com/questions/1431094/how-do-i-replace-a-character-at-a-particular-index-in-javascript?rq=1
 
   }, {
@@ -343,23 +364,52 @@ var Version = /*#__PURE__*/function () {
       return string.substr(0, obj['index']) + string.substr(obj['index'], obj['0'].length).replace(obj['0'], replace);
     }
   }, {
-    key: "fix",
-    value: function fix(s, path) {
+    key: "fixD",
+    value: function fixD(s, path) {
       var _this2 = this;
 
       var p = this.matchAll(s, path.rule);
+      console.log(p);
       p.forEach(function (x) {
-        s = _this2.replaceAt(s, x, path.word.replace('$', String(x[0].length)));
+        console.log(x[1]);
+
+        var sp = _this2.generateSpace(path, Number(x[1]));
+      }); // p.forEach(x => {
+      //     s = this.replaceAt(s, x, path.word.replace('$', String(x[0].length)));
+      // })
+
+      return s;
+    }
+  }, {
+    key: "fixJ",
+    value: function fixJ(s, path) {
+      var _this3 = this;
+
+      var p = this.matchAll(s, path.rule);
+      p.forEach(function (x) {
+        s = _this3.replaceAt(s, x, path.word.replace('$', String(x[0].length)));
       });
       return s;
     }
   }, {
     key: "fixjson",
     value: function fixjson(s) {
-      var _this3 = this;
+      var _this4 = this;
 
       this.json.forEach(function (x) {
-        if (x.version === _this3.actual || x.to !== 0 || x.to <= _this3.actual) {
+        if (x.version === _this4.localVersion || x.to !== 0 || x.to <= _this4.localVersion) {
+          s = x.resolve(s, x);
+        }
+      });
+      return s;
+    }
+  }, {
+    key: "fixDom",
+    value: function fixDom(s) {
+      var _this5 = this;
+
+      this.dom.forEach(function (x) {
+        if (x.version === _this5.localVersion || x.to !== 0 || x.to <= _this5.localVersion) {
           s = x.resolve(s, x);
         }
       });
@@ -371,6 +421,7 @@ var Version = /*#__PURE__*/function () {
 }();
 
 exports.Version = Version;
+Version.actual = 2.0;
 },{}],"../src/lib/dom.ts":[function(require,module,exports) {
 "use strict";
 
@@ -403,7 +454,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function () { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
@@ -437,7 +488,7 @@ var Dom = /*#__PURE__*/function () {
     this.version = new _version.Version();
     this.tmpElement = [];
     this.tmpJson = [{
-      version: this.version.actual
+      version: _version.Version.actual
     }];
     this.init();
   }
@@ -457,9 +508,7 @@ var Dom = /*#__PURE__*/function () {
         _this.overide(x["detail"]["o"], el);
       });
       var am = this.el.children;
-      var bm = Array.from(this.el.children);
-      console.log(am);
-      console.log(bm); //TODO: chekc if has children
+      var bm = Array.from(this.el.children); //TODO: chekc if has children
 
       if (this.el.children.length >= 1) {
         this.pre(this.el.children);
@@ -658,6 +707,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Json = void 0;
 
+var _version = require("../conversion/version");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -670,47 +721,61 @@ var Json = /*#__PURE__*/function () {
 
     this.json = json;
     this.tmp = [];
+    var config = json[0];
+    this.version = new _version.Version(Number(config['version']));
 
-    for (var j in this.json) {
-      this.parse(j, null);
+    for (var i = 1; i < Object.keys(json).length; i++) {
+      this.parse(json[i], null);
     }
   }
 
   _createClass(Json, [{
+    key: "getT",
+    value: function getT(s) {
+      var a = this.version.fixDom(s);
+      console.log(a);
+      return s;
+    }
+  }, {
     key: "parse",
     value: function parse(obj) {
       var _this = this;
 
       var base = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-      var node = obj["node"];
-      var d = null;
 
-      if (node === "#text") {
-        d = document.createTextNode(obj["text"]);
+      if (obj['version']) {
+        console.log("find", obj);
       } else {
-        d = document.createElement(node);
+        var node = obj["node"];
+        var d = null;
 
-        if (obj["text"] !== undefined) {
-          d.textContent = obj["text"];
+        if (node === "#text") {
+          d = document.createTextNode(this.getT(obj["text"]));
+        } else {
+          d = document.createElement(node);
+
+          if (obj["text"] !== undefined) {
+            d.textContent = obj["text"];
+          }
         }
-      }
 
-      if (obj["attr"] !== undefined) {
-        obj["attr"].forEach(function (x) {
-          d.setAttribute(x["name"], x["value"]);
-        });
-      }
+        if (obj["attr"] !== undefined) {
+          obj["attr"].forEach(function (x) {
+            d.setAttribute(x["name"], x["value"]);
+          });
+        }
 
-      if (obj['childs'] !== undefined) {
-        obj["childs"].forEach(function (x) {
-          _this.parse(x, d);
-        });
-      }
+        if (obj['childs'] !== undefined) {
+          obj["childs"].forEach(function (x) {
+            _this.parse(x, d);
+          });
+        }
 
-      if (base !== null) {
-        base.appendChild(d);
-      } else {
-        this.tmp.push(d);
+        if (base !== null) {
+          base.appendChild(d);
+        } else {
+          this.tmp.push(d);
+        }
       }
     }
   }, {
@@ -724,7 +789,7 @@ var Json = /*#__PURE__*/function () {
 }();
 
 exports.Json = Json;
-},{}],"../src/parser.ts":[function(require,module,exports) {
+},{"../conversion/version":"../src/conversion/version.ts"}],"../src/parser.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -839,7 +904,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41627" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "46389" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

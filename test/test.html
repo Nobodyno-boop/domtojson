@@ -1,37 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>For try</title>
-</head>
-<body>
+  </head>
+  <body>
     <div id="app">
-        <p>Lorem ipsum <em class="class">dolor</em> sit amet, <b>quo lorem cetero epicurei id</b>, discere percipit qui ei. </p>
-        <p>Lorem ipsum dolor sit amet, quo lorem cetero epicurei id, discere percipit qui ei. </p>
-        <div style="color:red;"><p>Lorem ipsum dolor sit amet</p><br>
-        <img id="image" src="https://picsum.photos/id/919/200/200" alt="randomimg"></div> 
-    </div >  
+      <p>
+        Lorem ipsum <em class="class">dolor</em> sit amet,
+        <b>quo lorem cetero epicurei id</b>, discere percipit qui ei.
+      </p>
+      <p>
+        Lorem ipsum dolor sit amet, quo lorem cetero epicurei id, discere
+        percipit qui ei.
+      </p>
+      <div style="color: red;">
+        <p>Lorem ipsum dolor sit amet</p>
+        <br />
+        <img
+          id="image"
+          src="https://picsum.photos/id/919/200/200"
+          alt="randomimg"
+        />
+      </div>
+    </div>
 
-    <script src="../src/index.ts"></script>
+    <script src="../dist/bundle.js"></script>
     <button onclick="e()">Click</button>
 
-    <script >
-        
-        // let p = DTM.toJson(document.getElementById("app"))
-        // // console.log(p)
-        // let d = DTM.toDom(p, "div")
-        // // console.log(d)
-        // document.body.append(d)
+    <script>
+      // let p = DTM.toJson(document.getElementById("app"))
+      // // console.log(p)
+      // let d = DTM.toDom(p, "div")
+      // // console.log(d)
+      // document.body.append(d)
 
-        function e(e){
-            console.log("eee")
-            let n = DTM.newInstance();
-            let c = n.toJson(document.getElementById("app"));
-            console.log(`${JSON.stringify(c)}`)
-        }
+      function e(e) {
+        console.log("eee");
+        let n = new DTM.Parser();
+        let c = n.toJson(document.getElementById("app"));
+        console.log(`${JSON.stringify(c)}`);
+      }
     </script>
-
-</body>
+  </body>
 </html>

@@ -9,6 +9,7 @@ export default class Dom {
     pre(h: HTMLCollection, base?: boolean): void;
     private override;
     private parse;
+    private _push;
     private getElement;
     getJson(): Object;
 }

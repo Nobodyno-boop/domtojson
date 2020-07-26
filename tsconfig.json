@@ -1,19 +1,18 @@
 {
-    "compilerOptions": {
-        "module": "es2015",
-        "moduleResolution": "node",
-        "target": "es5",
-        "outDir": "./dist/",
-        "allowJs": true,
-        "noImplicitReturns": true,
-        "noImplicitAny": true,
-        "baseUrl": "./src",
-        "paths": {
-            "~*": ["./*"]
-        },
-        "typeRoots": ["node_modules/@types"]
-    },
-    "include": [
-        "./src/**/*"
-    ]
+  "compilerOptions": {
+    "module": "es2015",
+    "moduleResolution": "node",
+    "target": "es5",
+    "allowJs": true,
+    "declaration": true,
+    "declarationDir": "dist/",
+    "noImplicitReturns": true,
+    "noImplicitAny": true,
+    "baseUrl": "./src",
+    "removeComments": true,
+    "paths": {
+      "~*": ["./*"]
+    }
+  },
+  "include": ["./src/**/*"]
 }

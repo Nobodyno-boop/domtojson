@@ -1,4 +1,4 @@
-import { IParserConfig, ParserConfig } from './../config';
+import { IParserConfig, ParserConfig } from "./../config";
 export declare class ParserAPI implements IParserConfig {
     config: ParserConfig;
     constructor(config: ParserConfig);

@@ -293,7 +293,5 @@ var Parser = (function () {
     return Parser;
 }());
 
-var index = { Parser: Parser };
-
-export default index;
+export default Parser;
 //# sourceMappingURL=index.es.js.map

@@ -295,7 +295,5 @@ var Parser = (function () {
     return Parser;
 }());
 
-var index = { Parser: Parser };
-
-module.exports = index;
+module.exports = Parser;
 //# sourceMappingURL=index.cjs.js.map

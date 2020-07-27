@@ -296,8 +296,6 @@ var DTM = (function () {
       return Parser;
   }());
 
-  var index = { Parser: Parser };
-
-  return index;
+  return Parser;
 
 }());

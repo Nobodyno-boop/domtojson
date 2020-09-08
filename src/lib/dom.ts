@@ -1,10 +1,11 @@
 import { Parser } from "./../parser";
 import { ParserConfig } from "../config";
+import { Event } from "utils/Event";
 
 export default class Dom {
   private tmpElement: any[];
   private tmpJson: any[];
-
+  private event: Event = new Event();
   constructor(private el: HTMLElement, protected config: ParserConfig) {
     this.tmpElement = [];
     this.tmpJson = [];
@@ -12,21 +13,26 @@ export default class Dom {
   }
 
   init() {
-    this.el.addEventListener("override", (x: any) => {
+    this.event.on("override", (x: any) => {
       let el = this.getElement(x["detail"]["v"]);
       if (el === null) {
-        console.error("[!Error!] Cannot catch HTMLELEMENT ! ");
+        throw new Error("[DTM] Cannot catch HTMLELEMENT ! ");
+      } else {
+        this.override(x["detail"]["o"], el);
       }
-      this.override(x["detail"]["o"], el);
     });
-    //TODO: chekc if has children
+
     if (this.el.children.length >= 1) {
       this.pre(this.el.children);
       this.el.childNodes.forEach((x) => {
         this.parse(x);
       });
     } else {
-      throw new Error("[DTM] No children ! ");
+      if (this.el.childNodes[0].nodeName === "#text") {
+        this.parse(this.el.childNodes[0]);
+      } else {
+        throw new Error("[DTM] No children ! ");
+      }
     }
   }
 
@@ -105,13 +111,13 @@ export default class Dom {
     let nodeName = v.nodeName.toLowerCase();
     let obj: any = {};
     obj["node"] = nodeName;
+
     if (base === null && nodeName !== "#text") {
       this.tmpJson.push(obj);
     }
 
     if (v.nodeName !== "#text") {
-      let e = new CustomEvent("override", { detail: { v: v, o: obj } });
-      this.el.dispatchEvent(e);
+      this.event.emit("override", { detail: { v: v, o: obj } });
     }
     if (v.hasChildNodes()) {
       if (base != null) {
@@ -139,6 +145,9 @@ export default class Dom {
       }
     } else if (base != null) {
       this._push(base, obj);
+    } else if (base === null && v.nodeName === "#text") {
+      obj["text"] = v.textContent;
+      this.tmpJson.push(obj);
     }
   }
 

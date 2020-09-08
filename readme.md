@@ -14,6 +14,7 @@ For node
 - Support cjs/es module
 - Browser bundle with [unpkg](https://unpkg.com/@poulpi/domtojson@latest/dist/bundle.js)
 - Typescript support with type definition
+- Compression Option with gzip base64 (its really cool try it.)
 
 ### To json
 
@@ -124,5 +125,3 @@ console.log(dom);
 ```
 
 MIT LICENSE.
-
-(Article medium.)

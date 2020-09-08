@@ -7,24 +7,17 @@
     <title>For try</title>
   </head>
   <body>
-    <div id="app">
-      <p>
-        Lorem ipsum <em class="class">dolor</em> sit amet,
-        <b>quo lorem cetero epicurei id</b>, discere percipit qui ei.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet, quo lorem cetero epicurei id, discere
-        percipit qui ei.
-      </p>
-      <div style="color: red;">
-        <p>Lorem ipsum dolor sit amet</p>
-        <br />
-        <img
-          id="image"
-          src="https://picsum.photos/id/919/200/200"
-          alt="randomimg"
-        />
-      </div>
+    <div
+      _ngcontent-oye-c5=""
+      class="content modeEdition"
+      contenteditable="true"
+      id="app"
+      ng-reflect-klass="content"
+      ng-reflect-ng-class="[object Object]"
+    >
+      test set se gdg&nbsp;
+      <div>sdfsdfsd</div>
+      <div>fsd</div>
     </div>
 
     <script src="../dist/bundle.js"></script>
@@ -38,10 +31,9 @@
       // document.body.append(d)
 
       function e(e) {
-        console.log("eee");
-        let n = new DTM.Parser();
+        let n = new DTM(true);
         let c = n.toJson(document.getElementById("app"));
-        console.log(`${JSON.stringify(c)}`);
+        // console.log(`${JSON.stringify(c)}`);
       }
     </script>
   </body>

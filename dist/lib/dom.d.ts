@@ -4,6 +4,7 @@ export default class Dom {
     protected config: ParserConfig;
     private tmpElement;
     private tmpJson;
+    private event;
     constructor(el: HTMLElement, config: ParserConfig);
     init(): void;
     pre(h: HTMLCollection, base?: boolean): void;

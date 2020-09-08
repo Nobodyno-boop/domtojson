@@ -6,8 +6,9 @@ export interface IParser {
     newInstance(): IParser;
 }
 export declare class Parser implements IParser {
+    isDebug: boolean;
     private config;
-    constructor();
+    constructor(isDebug?: boolean);
     api(fn: {
         (api: ParserAPI): IParserConfig;
     }): void;

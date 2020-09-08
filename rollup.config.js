@@ -1,6 +1,12 @@
 import typescript from "rollup-plugin-typescript2";
 import commonjs from "@rollup/plugin-commonjs";
 import pkg from "./package.json";
+import globals from "rollup-plugin-node-globals";
+import builtn from "rollup-plugin-node-builtins";
+import nodePolyfills from "rollup-plugin-node-polyfills";
+import uglify from "rollup-plugin-uglify";
+
+let plugins = [commonjs(), typescript(), globals(), builtn(), nodePolyfills()];
 
 export default {
   input: "src/index.ts",
@@ -12,7 +18,7 @@ export default {
       file: pkg.main,
       format: "cjs",
       sourcemap: true,
-      plugins: [commonjs()],
+      // plugins: [globals(), builtn(), nodePolyfills()],
     },
     {
       file: pkg.module,
@@ -25,5 +31,5 @@ export default {
       name: "DTM",
     },
   ],
-  plugins: [typescript()],
+  plugins: [...plugins],
 };

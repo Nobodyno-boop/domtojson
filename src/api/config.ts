@@ -1,20 +1,72 @@
-import { IParserConfig, ParserConfig } from "./../config";
+type DNodeAttr = { name: string; attr: string[] };
 
-// Maybe make other custom function.
-export class ParserAPI implements IParserConfig {
-  constructor(public config: ParserConfig) {}
+type DNode = { node: string; value: DNodeAttr[] };
 
-  set(obj: {
-    node: string;
-    exclude?: string[];
-    include?: string[];
-  }): IParserConfig {
-    this.config.set(obj);
+type ConfigDefault = {
+  Helper: {
+    gzip: boolean;
+  };
+};
+
+class ParserConfig {
+  private _include: Record<string, DNodeAttr[]> = {};
+  private _exclude: Record<string, DNodeAttr[]> = {};
+
+  constructor(
+    public useApi: boolean = false,
+    public config: ConfigDefault = { Helper: { gzip: true } }
+  ) {}
+
+  in(dn: DNode): ParserConfig {
+    this.set(dn, 0);
     return this;
   }
 
-  excludeNode(...node: string[]): IParserConfig {
-    this.config.excludeNode(...node);
+  ex(dn: DNode): ParserConfig {
+    this.set(dn, 1);
     return this;
+  }
+
+  haveAttribute(node: string) {
+    return (
+      typeof this._include[node] !== "undefined" ||
+      typeof this._exclude[node] !== "undefined"
+    );
+  }
+
+  getAttribute(node: string): DNodeAttr[] {
+    if (this.haveAttribute(node)) {
+      let p1 = this._include[node];
+      let p2 = this._exclude[node];
+
+      if (typeof p1 !== "undefined") {
+        return p1;
+      } else if (typeof p2 !== "undefined") {
+        return p2;
+      }
+    } else return [];
+  }
+
+  /**
+   *
+   * @param dn
+   * @param is 0 is in 1 is ex
+   */
+  private set(dn: DNode, is: number) {
+    if (is === 0) {
+      this._include = {
+        ...this._include,
+        ...this.frm(dn.node, JSON.stringify(dn.value)),
+      };
+    } else {
+      this._exclude = {
+        ...this._exclude,
+        ...this.frm(dn.node, JSON.stringify(dn.value)),
+      };
+    }
+  }
+
+  private frm(name: string, attr: string): Record<string, DNodeAttr[]> {
+    return JSON.parse(`{\"${name}\:${attr}"}`);
   }
 }

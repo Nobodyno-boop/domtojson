@@ -1,9 +1,8 @@
 import Dom from "./lib/dom";
 import { Json } from "./lib/json";
-import { formatBytes, gzip, ungzip } from "~utils/Other";
-import { ParserConfig } from "~api/config";
+import { formatBytes, gzip, ungzip } from "./utils/Other";
+import { ParserConfig } from "./api/config";
 import L from "./utils/L";
-import { strict } from "assert";
 
 export class Parser {
   private config: ParserConfig = new ParserConfig(false, {
@@ -50,8 +49,8 @@ export class Parser {
             if (this.isDebug) {
               let iB = JSON.stringify(out).length;
               let ratio = (iB / r.length) * 100;
-              L.info("Ratio compress ", ratio, "%");
-              L.info("Size of compress", formatBytes(r.length));
+              L.info(`Ratio compress ${ratio.toFixed(2)}%`);
+              L.info("Size of compress wtih Gzip", formatBytes(r.length));
             }
 
             resolve(r);

@@ -1,6 +1,6 @@
-import { Event } from "utils/Event";
-import { ParserConfig } from "~api/config";
-import L from "~utils/L";
+import { Event } from "../utils/Event";
+import { ParserConfig } from "../api/config";
+import L from "../utils/L";
 
 export default class Dom {
   private tmpElement: any[];

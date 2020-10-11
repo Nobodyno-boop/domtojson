@@ -1,6 +1,5 @@
 import { gzip as ZblibZ, gunzip as ZblibU } from "zlib";
 import { Buffer } from "buffer";
-import L from "./L";
 
 export function formatBytes(a: any, b = 2) {
   if (0 === a) return "0 Bytes";

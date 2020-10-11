@@ -11493,8 +11493,8 @@ var Parser = (function () {
                     if (_this.isDebug) {
                         var iB = JSON.stringify(out).length;
                         var ratio = (iB / r.length) * 100;
-                        L$1.info("Ratio compress ", ratio, "%");
-                        L$1.info("Size of compress", formatBytes(r.length));
+                        L$1.info("Ratio compress " + ratio.toFixed(2) + "%");
+                        L$1.info("Size of compress wtih Gzip", formatBytes(r.length));
                     }
                     resolve(r);
                 })

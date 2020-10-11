@@ -1,4 +1,4 @@
-import { ParserConfig } from "~api/config";
+import { ParserConfig } from "./api/config";
 export declare class Parser {
     isDebug: boolean;
     private config;

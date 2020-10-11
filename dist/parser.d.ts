@@ -7,6 +7,6 @@ export declare class Parser {
         (api: ParserConfig): ParserConfig;
     }): void;
     toJson(element: HTMLElement): Promise<[] | String>;
-    toDom(json: [] | string, element?: HTMLElement): Promise<HTMLElement>;
+    toDom(json: [] | Uint8Array, element?: HTMLElement): Promise<HTMLElement>;
     newInstance(): Parser;
 }

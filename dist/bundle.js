@@ -11397,7 +11397,7 @@ var DTM = (function () {
         var promise = new Promise(function (resolve, reject) {
             gzip(input.toString("base64"), options, function (error, result) {
                 if (!error)
-                    resolve(ab2str(result));
+                    resolve(result);
                 else
                     reject(Error(error));
             });
@@ -11405,9 +11405,8 @@ var DTM = (function () {
         return promise;
     };
     var ungzip = function (input, options) {
-        var a = Uint8Array.from(input, function (c) { return c.codePointAt(0); });
         var promise = new Promise(function (resolve, reject) {
-            gunzip(Buffer.from(a.buffer), options, function (error, result) {
+            gunzip(Buffer.from(input, "base64"), options, function (error, result) {
                 if (!error)
                     resolve(result);
                 else
@@ -11416,9 +11415,6 @@ var DTM = (function () {
         });
         return promise;
     };
-    function ab2str(buf) {
-        return String.fromCharCode.apply(null, new Uint16Array(buf));
-    }
 
     var ParserConfig = (function () {
         function ParserConfig(useApi, config) {
@@ -11512,7 +11508,7 @@ var DTM = (function () {
         };
         Parser.prototype.toDom = function (json, element) {
             return new Promise(function (resolve, reject) {
-                if (typeof json === "string") {
+                if (json instanceof Uint8Array) {
                     ungzip(json).then(function (x) {
                         var dom = new Json(JSON.parse(x));
                         element = element !== null && element !== void 0 ? element : document.createElement("div");

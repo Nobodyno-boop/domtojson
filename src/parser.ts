@@ -65,9 +65,9 @@ export class Parser {
     });
   }
 
-  toDom(json: [] | string, element?: HTMLElement): Promise<HTMLElement> {
+  toDom(json: [] | Uint8Array, element?: HTMLElement): Promise<HTMLElement> {
     return new Promise((resolve, reject) => {
-      if (typeof json === "string") {
+      if (json instanceof Uint8Array) {
         ungzip(json).then((x: any) => {
           let dom = new Json(JSON.parse(x));
           element = element ?? document.createElement("div");

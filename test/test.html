@@ -12,7 +12,7 @@
     </style>
   </head>
   <body>
-    <div id="app">
+    <div id="app" contenteditable="">
       <p>
         Lorem ipsum <em class="class">dolor</em> sit amet,
         <b>quo lorem cetero epicurei id</b>, discere percipit qui ei.
@@ -49,7 +49,7 @@
         // n.api((x) => {
         //   return x.in({
         //     node: "div",
-        //     value: [{ name: "class", attr: ["bg-g","txt-a", 'io-i'] },{ name: "l", attr: ["issou"] } , { name: "id" }],
+        //     value: [{ name: "class", attr: ["bg-g","txt-a", 'io-i'] },{ name: "l" } , { name: "id" }],
         //   })
         // });
 
@@ -59,7 +59,7 @@
       function ap(a) {
         console.log(a);
         let n = new DTM(true, false);
-        n.toDom(a).then((x) => console.log);
+        n.toDom(a).then((x) => console.log(x));
       }
     </script>
   </body>

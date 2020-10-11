@@ -1,7 +1,7 @@
 {
   "name": "@poulpi/domtojson",
-  "version": "0.1.313",
-  "description": "simple domtojson",
+  "version": "0.2.0",
+  "description": "Simple domtojson with gzip for more optimization",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
   "directories": {
@@ -45,5 +45,8 @@
     "rollup-plugin-uglify": "^6.0.4",
     "tslib": "^2.0.0",
     "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "rollup-plugin-terser": "^7.0.2"
   }
 }

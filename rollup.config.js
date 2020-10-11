@@ -4,7 +4,6 @@ import pkg from "./package.json";
 import globals from "rollup-plugin-node-globals";
 import builtn from "rollup-plugin-node-builtins";
 import nodePolyfills from "rollup-plugin-node-polyfills";
-import uglify from "rollup-plugin-uglify";
 
 let plugins = [commonjs(), typescript(), globals(), builtn(), nodePolyfills()];
 
@@ -29,6 +28,12 @@ export default {
       file: "dist/bundle.js",
       format: "iife",
       name: "DTM",
+    },
+    {
+      file: "dist/bundle.min.js",
+      format: "iife",
+      name: "DTM",
+      plugins: [],
     },
   ],
   plugins: [...plugins],

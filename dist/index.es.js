@@ -1,66 +1,3 @@
-var ParserConfig = (function () {
-    function ParserConfig(api) {
-        if (api === void 0) { api = false; }
-        this.api = api;
-        this.obj = [];
-        this.exc = [];
-    }
-    ParserConfig.prototype.set = function (obj) {
-        this._set(obj);
-        return this;
-    };
-    ParserConfig.prototype._set = function (obj) {
-        if (this.obj)
-            this.obj.push(obj);
-    };
-    ParserConfig.prototype._excludeNode = function () {
-        var _a;
-        var node = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            node[_i] = arguments[_i];
-        }
-        (_a = this.exc).push.apply(_a, node);
-    };
-    ParserConfig.prototype.getObj = function () {
-        return this.obj;
-    };
-    ParserConfig.prototype.isApi = function () {
-        return this.api;
-    };
-    ParserConfig.prototype.isExclude = function (node) {
-        return this.exc.includes(node);
-    };
-    ParserConfig.prototype.excludeNode = function () {
-        var node = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            node[_i] = arguments[_i];
-        }
-        this._excludeNode.apply(this, node);
-        return this;
-    };
-    return ParserConfig;
-}());
-
-var ParserAPI = (function () {
-    function ParserAPI(config) {
-        this.config = config;
-    }
-    ParserAPI.prototype.set = function (obj) {
-        this.config.set(obj);
-        return this;
-    };
-    ParserAPI.prototype.excludeNode = function () {
-        var _a;
-        var node = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            node[_i] = arguments[_i];
-        }
-        (_a = this.config).excludeNode.apply(_a, node);
-        return this;
-    };
-    return ParserAPI;
-}());
-
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
 
@@ -75,6 +12,17 @@ LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
+
+var __assign = function() {
+    __assign = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 
 function __spreadArrays() {
     for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
@@ -109,6 +57,82 @@ var Event = (function () {
     return Event;
 }());
 
+var L = (function () {
+    function L() {
+        this.config = {
+            info: {
+                bg: "#a29bfe",
+                txt: "white",
+            },
+            error: {
+                bg: "#ff7675",
+                txt: "white",
+            },
+            warn: {
+                bg: "#fdcb6e",
+                txt: "black",
+            },
+            debug: {
+                bg: "#00b894",
+                txt: "black",
+            },
+        };
+    }
+    L.prototype.info = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        this.out.apply(this, __spreadArrays(["info"], args));
+    };
+    L.prototype.debug = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        this.out.apply(this, __spreadArrays(["debug"], args));
+    };
+    L.prototype.warn = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        this.out.apply(this, __spreadArrays(["warn"], args));
+    };
+    L.prototype.error = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        this.out.apply(this, __spreadArrays(["error"], args));
+    };
+    L.prototype.group = function (label, f) {
+        console.group(label);
+        f(this);
+        console.groupEnd();
+    };
+    L.prototype.out = function (type) {
+        var args = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            args[_i - 1] = arguments[_i];
+        }
+        switch (type) {
+            case "debug":
+                console.log.apply(console, __spreadArrays(["%c  " + type.toUpperCase() + "  %c %o",
+                    "background-color: " + this.config[type]["bg"] + "; font-weight:bold;",
+                    "font-color:" + this.config[type]["txt"] + ";"], args));
+                break;
+            default:
+                console.log.apply(console, __spreadArrays(["%c  " + (type.length === 4 ? type.toUpperCase() + " " : type.toUpperCase()) + "  %c %s",
+                    "background-color: " + this.config[type]["bg"] + "; font-weight:bold;",
+                    "font-color:" + this.config[type]["txt"] + ";"], args));
+                break;
+        }
+    };
+    return L;
+}());
+var L$1 = new L();
+
 var Dom = (function () {
     function Dom(el, config) {
         this.el = el;
@@ -120,28 +144,32 @@ var Dom = (function () {
     }
     Dom.prototype.init = function () {
         var _this = this;
-        this.event.on("override", function (x) {
-            var el = _this.getElement(x["detail"]["v"]);
-            if (el === null) {
-                throw new Error("[DTM] Cannot catch HTMLELEMENT ! ");
-            }
-            else {
-                _this.override(x["detail"]["o"], el);
-            }
-        });
-        if (this.el.children.length >= 1) {
-            this.pre(this.el.children);
-            this.el.childNodes.forEach(function (x) {
-                _this.parse(x);
+        try {
+            this.event.on("override", function (x) {
+                var el = _this.getElement(x["detail"]["v"]);
+                if (el === null) {
+                    throw new Error("Cannot catch a HTLMELEMENT ATTRIBUTE");
+                }
+                else {
+                    _this.override(x["detail"]["o"], el);
+                }
             });
-        }
-        else {
-            if (this.el.childNodes[0].nodeName === "#text") {
-                this.parse(this.el.childNodes[0]);
+            if (this.el.children.length >= 1) {
+                this.pre(this.el.children);
+                this.el.childNodes.forEach(function (x) {
+                    _this.parse(x);
+                });
             }
             else {
-                throw new Error("[DTM] No children ! ");
+                if (this.el.childNodes.length === 0)
+                    throw new Error("You're htmlelement have no children !");
+                if (this.el.childNodes[0]["nodeName"] === "#text") {
+                    this.parse(this.el.childNodes[0]);
+                }
             }
+        }
+        catch (error) {
+            L$1.error(error["message"]);
         }
     };
     Dom.prototype.pre = function (h, base) {
@@ -155,48 +183,30 @@ var Dom = (function () {
     };
     Dom.prototype.override = function (obj, v) {
         var attr = [];
-        if (this.config.isApi()) {
-            var co = this.config
-                .getObj()
-                .filter(function (x) { return x.node.toLowerCase() === v.nodeName.toLowerCase(); });
-            if (co.length === 1) {
-                var m = co[0];
-                var bin = typeof m["include"] !== "undefined";
-                var bex = typeof m["exclude"] !== "undefined";
-                var _loop_1 = function (i) {
-                    var va = v.attributes.item(i);
-                    if (bin && bex) {
-                        var xin = m["include"].filter(function (x) { return x.toLowerCase() === va.name.toLowerCase(); });
-                        var xen = m["exclude"].filter(function (x) { return x.toLowerCase() === va.name.toLowerCase(); });
-                        if (xin.length > 1 && xen.length >= 1) {
-                            throw new Error("[DomToJson] " + va.name + "is on exclude and include !");
-                        }
-                        if (xin.length >= 1) {
-                            attr.push({ name: va.name, value: va.value });
-                        }
-                        if (xen.length >= 1) {
-                            attr.push({ name: va.name, value: va.value });
-                        }
-                    }
-                    if (bin) {
-                        var xin = m["include"].filter(function (x) { return x.toLowerCase() === va.name.toLowerCase(); });
-                        if (xin) {
-                            attr.push({ name: va.name, value: va.value });
-                        }
-                    }
-                    if (bex) {
-                        var xen = m["exclude"].filter(function (x) { return x.toLowerCase() === va.name.toLowerCase(); });
-                        if (!(xen.length >= 1)) {
-                            attr.push({ name: va.name, value: va.value });
-                        }
-                        else
-                            return { value: void 0 };
+        if (this.config.useApi) {
+            var cht = this.config.getAttribute(v.nodeName.toLowerCase());
+            if (v.attributes.length >= 1) {
+                var _loop_1 = function (index) {
+                    var element = v.attributes.item(index);
+                    var fi = cht.filter(function (x) { return x.name === element.name; });
+                    if (fi.length >= 1) {
+                        var els_1 = element.nodeValue.split(" ");
+                        var rt = fi.map(function (x) {
+                            if (typeof x.attr != "undefined") {
+                                var t_1 = "";
+                                var p = x.attr
+                                    .map(function (x) { return els_1.filter(function (o) { return o === x; }); })
+                                    .filter(function (x) { return x.length; })
+                                    .map(function (x) { return (t_1 = t_1 + x + " "); });
+                                attr.push({ name: element.name, value: p[p.length - 1] });
+                            }
+                            else
+                                attr.push({ name: element.name, value: element.value });
+                        });
                     }
                 };
-                for (var i = 0; i < v.attributes.length; i++) {
-                    var state_1 = _loop_1(i);
-                    if (typeof state_1 === "object")
-                        return state_1.value;
+                for (var index = 0; index < v.attributes.length; index++) {
+                    _loop_1(index);
                 }
             }
         }
@@ -10862,43 +10872,43 @@ Zlib.prototype._error = function(status) {
 };
 
 var _binding = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  NONE: NONE,
-  DEFLATE: DEFLATE,
-  INFLATE: INFLATE,
-  GZIP: GZIP,
-  GUNZIP: GUNZIP,
-  DEFLATERAW: DEFLATERAW,
-  INFLATERAW: INFLATERAW,
-  UNZIP: UNZIP,
-  Z_NO_FLUSH: Z_NO_FLUSH$1,
-  Z_PARTIAL_FLUSH: Z_PARTIAL_FLUSH$1,
-  Z_SYNC_FLUSH: Z_SYNC_FLUSH,
-  Z_FULL_FLUSH: Z_FULL_FLUSH$1,
-  Z_FINISH: Z_FINISH$2,
-  Z_BLOCK: Z_BLOCK$2,
-  Z_TREES: Z_TREES$1,
-  Z_OK: Z_OK$2,
-  Z_STREAM_END: Z_STREAM_END$2,
-  Z_NEED_DICT: Z_NEED_DICT$1,
-  Z_ERRNO: Z_ERRNO,
-  Z_STREAM_ERROR: Z_STREAM_ERROR$2,
-  Z_DATA_ERROR: Z_DATA_ERROR$2,
-  Z_BUF_ERROR: Z_BUF_ERROR$2,
-  Z_NO_COMPRESSION: Z_NO_COMPRESSION,
-  Z_BEST_SPEED: Z_BEST_SPEED,
-  Z_BEST_COMPRESSION: Z_BEST_COMPRESSION,
-  Z_DEFAULT_COMPRESSION: Z_DEFAULT_COMPRESSION$1,
-  Z_FILTERED: Z_FILTERED$1,
-  Z_HUFFMAN_ONLY: Z_HUFFMAN_ONLY$1,
-  Z_RLE: Z_RLE$1,
-  Z_FIXED: Z_FIXED$2,
-  Z_DEFAULT_STRATEGY: Z_DEFAULT_STRATEGY,
-  Z_BINARY: Z_BINARY$1,
-  Z_TEXT: Z_TEXT$1,
-  Z_UNKNOWN: Z_UNKNOWN$2,
-  Z_DEFLATED: Z_DEFLATED$2,
-  Zlib: Zlib
+    __proto__: null,
+    NONE: NONE,
+    DEFLATE: DEFLATE,
+    INFLATE: INFLATE,
+    GZIP: GZIP,
+    GUNZIP: GUNZIP,
+    DEFLATERAW: DEFLATERAW,
+    INFLATERAW: INFLATERAW,
+    UNZIP: UNZIP,
+    Z_NO_FLUSH: Z_NO_FLUSH$1,
+    Z_PARTIAL_FLUSH: Z_PARTIAL_FLUSH$1,
+    Z_SYNC_FLUSH: Z_SYNC_FLUSH,
+    Z_FULL_FLUSH: Z_FULL_FLUSH$1,
+    Z_FINISH: Z_FINISH$2,
+    Z_BLOCK: Z_BLOCK$2,
+    Z_TREES: Z_TREES$1,
+    Z_OK: Z_OK$2,
+    Z_STREAM_END: Z_STREAM_END$2,
+    Z_NEED_DICT: Z_NEED_DICT$1,
+    Z_ERRNO: Z_ERRNO,
+    Z_STREAM_ERROR: Z_STREAM_ERROR$2,
+    Z_DATA_ERROR: Z_DATA_ERROR$2,
+    Z_BUF_ERROR: Z_BUF_ERROR$2,
+    Z_NO_COMPRESSION: Z_NO_COMPRESSION,
+    Z_BEST_SPEED: Z_BEST_SPEED,
+    Z_BEST_COMPRESSION: Z_BEST_COMPRESSION,
+    Z_DEFAULT_COMPRESSION: Z_DEFAULT_COMPRESSION$1,
+    Z_FILTERED: Z_FILTERED$1,
+    Z_HUFFMAN_ONLY: Z_HUFFMAN_ONLY$1,
+    Z_RLE: Z_RLE$1,
+    Z_FIXED: Z_FIXED$2,
+    Z_DEFAULT_STRATEGY: Z_DEFAULT_STRATEGY,
+    Z_BINARY: Z_BINARY$1,
+    Z_TEXT: Z_TEXT$1,
+    Z_UNKNOWN: Z_UNKNOWN$2,
+    Z_DEFLATED: Z_DEFLATED$2,
+    Zlib: Zlib
 });
 
 function assert (a, msg) {
@@ -11384,7 +11394,7 @@ var gzip$1 = function (input, options) {
     var promise = new Promise(function (resolve, reject) {
         gzip(input.toString("base64"), options, function (error, result) {
             if (!error)
-                resolve(result);
+                resolve(ab2str(result));
             else
                 reject(Error(error));
         });
@@ -11392,71 +11402,132 @@ var gzip$1 = function (input, options) {
     return promise;
 };
 var ungzip = function (input, options) {
+    var a = Uint8Array.from(input, function (c) { return c.codePointAt(0); });
     var promise = new Promise(function (resolve, reject) {
-        gunzip(Buffer.from(input, "base64"), options, function (error, result) {
+        gunzip(Buffer.from(a.buffer), options, function (error, result) {
             if (!error)
-                resolve(result.toString("utf8"));
+                resolve(result);
             else
                 reject(Error(error));
         });
     });
     return promise;
 };
+function ab2str(buf) {
+    return String.fromCharCode.apply(null, new Uint16Array(buf));
+}
+
+var ParserConfig = (function () {
+    function ParserConfig(useApi, config) {
+        if (useApi === void 0) { useApi = false; }
+        if (config === void 0) { config = { Helper: { gzip: true }, logger: true }; }
+        this.useApi = useApi;
+        this.config = config;
+        this._include = {};
+    }
+    ParserConfig.prototype.in = function (dn) {
+        this.set(dn, 0);
+        return this;
+    };
+    ParserConfig.prototype.haveAttribute = function (node) {
+        return typeof this._include[node] !== "undefined";
+    };
+    ParserConfig.prototype.getAttribute = function (node) {
+        if (this.haveAttribute(node)) {
+            var p1 = this._include[node];
+            return p1;
+        }
+        else {
+            return [];
+        }
+    };
+    ParserConfig.prototype.set = function (dn, is) {
+        if (is === 0) {
+            this._include = __assign(__assign({}, this._include), this.frm(dn.node, JSON.stringify(dn.value)));
+        }
+    };
+    ParserConfig.prototype.frm = function (name, attr) {
+        return JSON.parse("{\"" + name + "\":" + attr + "}");
+    };
+    return ParserConfig;
+}());
 
 var Parser = (function () {
-    function Parser(isDebug) {
+    function Parser(isDebug, useGzip) {
         if (isDebug === void 0) { isDebug = false; }
+        if (useGzip === void 0) { useGzip = false; }
         this.isDebug = isDebug;
-        this.config = new ParserConfig();
+        this.config = new ParserConfig(false, {
+            Helper: { gzip: false },
+            logger: true,
+        });
+        if (useGzip)
+            this.config.config.Helper.gzip = true;
     }
     Parser.prototype.api = function (fn) {
-        var napi = fn(new ParserAPI(new ParserConfig(true)));
-        this.config = napi.config;
+        var napi = fn.call(null, new ParserConfig(true, this.config.config));
+        this.config = napi;
     };
     Parser.prototype.toJson = function (element) {
-        var json;
-        if (this.isDebug) {
-            var d = Date.now();
-            json = new Dom(element, this.config);
-            var dt = Date.now();
-            console.log("[DEBUG DTM] time elapsed:", dt - d, "ms");
-        }
-        else {
-            json = new Dom(element, this.config);
-        }
-        var out = json.getJson();
-        if (this.isDebug) {
-            console.log("Size of json", formatBytes(JSON.stringify(out).length));
-            gzip$1(JSON.stringify(out)).then(function (r) {
-                var iB = JSON.stringify(out).length;
-                var ratio = (iB / r.length) * 100;
-                console.log("Ratio compress ", ratio, "%");
-                console.log("Size of compress", formatBytes(r.length));
-                ungzip(r).then(function (x) {
-                    console.log("Unzip reverse equal:", JSON.stringify(out) === x);
-                    console.log(JSON.parse(x));
-                    console.log(out);
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var json;
+            if (_this.isDebug) {
+                var d = Date.now();
+                json = new Dom(element, _this.config);
+                var dt = Date.now();
+                L$1.info("time elapsed:", dt - d, "ms");
+            }
+            else {
+                json = new Dom(element, _this.config);
+            }
+            var out = json.getJson();
+            if (_this.isDebug) {
+                L$1.info("Size of json", formatBytes(JSON.stringify(out).length));
+            }
+            if (_this.config.config.Helper.gzip) {
+                gzip$1(JSON.stringify(out))
+                    .then(function (r) {
+                    if (_this.isDebug) {
+                        var iB = JSON.stringify(out).length;
+                        var ratio = (iB / r.length) * 100;
+                        L$1.info("Ratio compress ", ratio, "%");
+                        L$1.info("Size of compress", formatBytes(r.length));
+                    }
+                    resolve(r);
+                })
+                    .catch(function (e) {
+                    if (_this.isDebug)
+                        L$1.error(e);
+                    reject("Use debug mode for more info.");
                 });
-            });
-        }
-        return out;
+            }
+            else {
+                resolve(out);
+            }
+        });
     };
     Parser.prototype.toDom = function (json, element) {
-        var dom = new Json(json);
-        var d;
-        if (typeof element === "undefined") {
-            d = document.createElement("div");
-            dom.getElement().forEach(function (x) {
-                d.appendChild(x);
-            });
-        }
-        else {
-            d = element;
-            dom.getElement().forEach(function (x) {
-                d.appendChild(x);
-            });
-        }
-        return d;
+        return new Promise(function (resolve, reject) {
+            if (typeof json === "string") {
+                ungzip(json).then(function (x) {
+                    var dom = new Json(JSON.parse(x));
+                    element = element !== null && element !== void 0 ? element : document.createElement("div");
+                    dom.getElement().forEach(function (x) {
+                        element.appendChild(x);
+                    });
+                    resolve(element);
+                });
+            }
+            else {
+                var dom = new Json(json);
+                element = element !== null && element !== void 0 ? element : document.createElement("div");
+                dom.getElement().forEach(function (x) {
+                    element.appendChild(x);
+                });
+                resolve(element);
+            }
+        });
     };
     Parser.prototype.newInstance = function () {
         return new Parser();

@@ -1,20 +1,19 @@
-type DNodeAttr = { name: string; attr: string[] };
+export type DNodeAttr = { name: string; attr?: string[] };
 
-type DNode = { node: string; value: DNodeAttr[] };
+export type DNode = { node: string; value: DNodeAttr[] };
 
-type ConfigDefault = {
+export type ConfigDefault = {
   Helper: {
     gzip: boolean;
   };
+  logger: boolean;
 };
 
-class ParserConfig {
+export class ParserConfig {
   private _include: Record<string, DNodeAttr[]> = {};
-  private _exclude: Record<string, DNodeAttr[]> = {};
-
   constructor(
     public useApi: boolean = false,
-    public config: ConfigDefault = { Helper: { gzip: true } }
+    public config: ConfigDefault = { Helper: { gzip: true }, logger: true }
   ) {}
 
   in(dn: DNode): ParserConfig {
@@ -22,29 +21,17 @@ class ParserConfig {
     return this;
   }
 
-  ex(dn: DNode): ParserConfig {
-    this.set(dn, 1);
-    return this;
-  }
-
   haveAttribute(node: string) {
-    return (
-      typeof this._include[node] !== "undefined" ||
-      typeof this._exclude[node] !== "undefined"
-    );
+    return typeof this._include[node] !== "undefined";
   }
 
   getAttribute(node: string): DNodeAttr[] {
     if (this.haveAttribute(node)) {
       let p1 = this._include[node];
-      let p2 = this._exclude[node];
-
-      if (typeof p1 !== "undefined") {
-        return p1;
-      } else if (typeof p2 !== "undefined") {
-        return p2;
-      }
-    } else return [];
+      return p1;
+    } else {
+      return [] as DNodeAttr[];
+    }
   }
 
   /**
@@ -58,15 +45,10 @@ class ParserConfig {
         ...this._include,
         ...this.frm(dn.node, JSON.stringify(dn.value)),
       };
-    } else {
-      this._exclude = {
-        ...this._exclude,
-        ...this.frm(dn.node, JSON.stringify(dn.value)),
-      };
     }
   }
 
   private frm(name: string, attr: string): Record<string, DNodeAttr[]> {
-    return JSON.parse(`{\"${name}\:${attr}"}`);
+    return JSON.parse(`{"${name}":${attr}}`);
   }
 }

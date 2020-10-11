@@ -1,6 +1,6 @@
-import { Parser } from "./../parser";
-import { ParserConfig } from "../config";
 import { Event } from "utils/Event";
+import { ParserConfig } from "~api/config";
+import L from "~utils/L";
 
 export default class Dom {
   private tmpElement: any[];
@@ -13,26 +13,30 @@ export default class Dom {
   }
 
   init() {
-    this.event.on("override", (x: any) => {
-      let el = this.getElement(x["detail"]["v"]);
-      if (el === null) {
-        throw new Error("[DTM] Cannot catch HTMLELEMENT ! ");
-      } else {
-        this.override(x["detail"]["o"], el);
-      }
-    });
-
-    if (this.el.children.length >= 1) {
-      this.pre(this.el.children);
-      this.el.childNodes.forEach((x) => {
-        this.parse(x);
+    try {
+      this.event.on("override", (x: any) => {
+        let el = this.getElement(x["detail"]["v"]);
+        if (el === null) {
+          throw new Error("Cannot catch a HTLMELEMENT ATTRIBUTE");
+        } else {
+          this.override(x["detail"]["o"], el);
+        }
       });
-    } else {
-      if (this.el.childNodes[0].nodeName === "#text") {
-        this.parse(this.el.childNodes[0]);
+
+      if (this.el.children.length >= 1) {
+        this.pre(this.el.children);
+        this.el.childNodes.forEach((x) => {
+          this.parse(x);
+        });
       } else {
-        throw new Error("[DTM] No children ! ");
+        if (this.el.childNodes.length === 0)
+          throw new Error("You're htmlelement have no children !");
+        if (this.el.childNodes[0]["nodeName"] === "#text") {
+          this.parse(this.el.childNodes[0]);
+        }
       }
+    } catch (error) {
+      L.error(error["message"]);
     }
   }
 
@@ -48,51 +52,25 @@ export default class Dom {
 
   private override(obj: any, v: Element) {
     let attr = [];
-    if (this.config.isApi()) {
-      let co = this.config
-        .getObj()
-        .filter((x) => x.node.toLowerCase() === v.nodeName.toLowerCase());
-      if (co.length === 1) {
-        let m = co[0];
-        let bin = typeof m["include"] !== "undefined";
-        let bex = typeof m["exclude"] !== "undefined";
-        for (let i = 0; i < v.attributes.length; i++) {
-          let va = v.attributes.item(i);
-          if (bin && bex) {
-            let xin = m["include"].filter(
-              (x) => x.toLowerCase() === va.name.toLowerCase()
-            );
-            let xen = m["exclude"].filter(
-              (x) => x.toLowerCase() === va.name.toLowerCase()
-            );
-            if (xin.length > 1 && xen.length >= 1) {
-              throw new Error(
-                "[DomToJson] " + va.name + "is on exclude and include !"
-              );
-            }
-            if (xin.length >= 1) {
-              attr.push({ name: va.name, value: va.value });
-            }
-            if (xen.length >= 1) {
-              attr.push({ name: va.name, value: va.value });
-            }
-          }
+    if (this.config.useApi) {
+      let cht = this.config.getAttribute(v.nodeName.toLowerCase());
+      if (v.attributes.length >= 1) {
+        for (let index = 0; index < v.attributes.length; index++) {
+          let element = v.attributes.item(index);
+          let fi = cht.filter((x) => x.name === element.name);
+          if (fi.length >= 1) {
+            let els = element.nodeValue.split(" ");
+            let rt = fi.map((x) => {
+              if (typeof x.attr != "undefined") {
+                let t = "";
+                let p = x.attr
+                  .map((x) => els.filter((o) => o === x))
+                  .filter((x) => x.length)
+                  .map((x) => (t = t + x + " "));
 
-          if (bin) {
-            let xin = m["include"].filter(
-              (x) => x.toLowerCase() === va.name.toLowerCase()
-            );
-            if (xin) {
-              attr.push({ name: va.name, value: va.value });
-            }
-          }
-          if (bex) {
-            let xen = m["exclude"].filter(
-              (x) => x.toLowerCase() === va.name.toLowerCase()
-            );
-            if (!(xen.length >= 1)) {
-              attr.push({ name: va.name, value: va.value });
-            } else return;
+                attr.push({ name: element.name, value: p[p.length - 1] });
+              } else attr.push({ name: element.name, value: element.value });
+            });
           }
         }
       }
@@ -102,6 +80,7 @@ export default class Dom {
         attr.push({ name: va.name, value: va.value });
       }
     }
+
     if (attr.length >= 1) {
       obj["attr"] = attr;
     }

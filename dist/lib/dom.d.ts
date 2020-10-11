@@ -1,4 +1,4 @@
-import { ParserConfig } from "../config";
+import { ParserConfig } from "~api/config";
 export default class Dom {
     private el;
     protected config: ParserConfig;

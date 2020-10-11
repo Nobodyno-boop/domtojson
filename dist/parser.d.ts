@@ -1,18 +1,12 @@
-import { IParserConfig } from "./config";
-import { ParserAPI } from "./api/config";
-export interface IParser {
-    toJson(element: HTMLElement): Object;
-    toDom(json: [], element?: HTMLElement): HTMLElement;
-    newInstance(): IParser;
-}
-export declare class Parser implements IParser {
+import { ParserConfig } from "~api/config";
+export declare class Parser {
     isDebug: boolean;
     private config;
-    constructor(isDebug?: boolean);
+    constructor(isDebug?: boolean, useGzip?: boolean);
     api(fn: {
-        (api: ParserAPI): IParserConfig;
+        (api: ParserConfig): ParserConfig;
     }): void;
-    toJson(element: HTMLElement): Object;
-    toDom(json: [], element?: HTMLElement): HTMLElement;
-    newInstance(): IParser;
+    toJson(element: HTMLElement): Promise<[] | String>;
+    toDom(json: [] | string, element?: HTMLElement): Promise<HTMLElement>;
+    newInstance(): Parser;
 }

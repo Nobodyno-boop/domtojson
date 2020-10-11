@@ -1,52 +1,93 @@
-import { IParserConfig, ParserConfig } from "./config";
-import { ParserAPI } from "./api/config";
 import Dom from "./lib/dom";
 import { Json } from "./lib/json";
+import { formatBytes, gzip, ungzip } from "./utils/Other";
+import { ParserConfig } from "./api/config";
+import L from "./utils/L";
 
-export interface IParser {
-  toJson(element: HTMLElement): Object;
-  toDom(json: [], element?: HTMLElement): HTMLElement;
-  newInstance(): IParser;
-}
-
-export class Parser implements IParser {
-  private config: ParserConfig = new ParserConfig();
-  constructor() {}
-
-  api(fn: { (api: ParserAPI): IParserConfig }) {
-    let napi: ParserAPI = fn(
-      new ParserAPI(new ParserConfig(true))
-    ) as ParserAPI;
-    // fn((api:IParserConfig) => {
-    //     api.set({node:"img", "exclude": ["id"]})
-    // })
-
-    this.config = napi.config;
+export class Parser {
+  private config: ParserConfig = new ParserConfig(false, {
+    Helper: { gzip: false },
+    logger: true,
+  });
+  constructor(public isDebug = false, useGzip: boolean = false) {
+    if (useGzip) this.config.config.Helper.gzip = true;
   }
 
-  toJson(element: HTMLElement): Object {
-    let json = new Dom(element, this.config);
-    return json.getJson();
+  api(fn: { (api: ParserConfig): ParserConfig }) {
+    let napi: ParserConfig = fn.call(
+      null,
+      new ParserConfig(true, this.config.config)
+    );
+
+    this.config = napi;
+  }
+  /**
+   *
+   * @param element {HTMLElement} the HTMLElement you want to json
+   * @returns Json or
+   */
+  toJson(element: HTMLElement): Promise<[] | String> {
+    return new Promise((resolve, reject) => {
+      let json;
+
+      if (this.isDebug) {
+        let d = Date.now();
+        json = new Dom(element, this.config);
+        let dt = Date.now();
+        L.info("time elapsed:", dt - d, "ms");
+      } else {
+        json = new Dom(element, this.config);
+      }
+      let out = json.getJson() as [];
+
+      if (this.isDebug) {
+        L.info("Size of json", formatBytes(JSON.stringify(out).length));
+      }
+      if (this.config.config.Helper.gzip) {
+        gzip(JSON.stringify(out))
+          .then((r: String) => {
+            if (this.isDebug) {
+              let iB = JSON.stringify(out).length;
+              let ratio = (iB / r.length) * 100;
+              L.info(`Ratio compress ${ratio.toFixed(2)}%`);
+              L.info("Size of compress wtih Gzip", formatBytes(r.length));
+            }
+
+            resolve(r);
+          })
+          .catch((e) => {
+            if (this.isDebug) L.error(e);
+            reject("Use debug mode for more info.");
+          });
+      } else {
+        resolve(out);
+      }
+    });
   }
 
-  toDom(json: [], element?: HTMLElement): HTMLElement {
-    let dom = new Json(json);
-    let d: HTMLElement;
-    if (typeof element === "undefined") {
-      d = document.createElement("div");
-      dom.getElement().forEach((x: any) => {
-        d.appendChild(x);
-      });
-    } else {
-      d = element;
-      dom.getElement().forEach((x: any) => {
-        d.appendChild(x);
-      });
-    }
-    return d;
+  toDom(json: [] | string, element?: HTMLElement): Promise<HTMLElement> {
+    return new Promise((resolve, reject) => {
+      if (typeof json === "string") {
+        ungzip(json).then((x: any) => {
+          let dom = new Json(JSON.parse(x));
+          element = element ?? document.createElement("div");
+          dom.getElement().forEach((x: any) => {
+            element.appendChild(x);
+          });
+          resolve(element);
+        });
+      } else {
+        let dom = new Json(json as []);
+        element = element ?? document.createElement("div");
+        dom.getElement().forEach((x: any) => {
+          element.appendChild(x);
+        });
+        resolve(element);
+      }
+    });
   }
 
-  newInstance(): IParser {
+  newInstance(): Parser {
     return new Parser();
   }
 }

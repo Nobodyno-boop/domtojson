@@ -1,6 +1,11 @@
 import typescript from "rollup-plugin-typescript2";
 import commonjs from "@rollup/plugin-commonjs";
 import pkg from "./package.json";
+import globals from "rollup-plugin-node-globals";
+import builtn from "rollup-plugin-node-builtins";
+import nodePolyfills from "rollup-plugin-node-polyfills";
+import {terser} from "rollup-plugin-terser"
+let plugins = [commonjs(), typescript(), globals(), builtn(), nodePolyfills()];
 
 export default {
   input: "src/index.ts",
@@ -12,7 +17,6 @@ export default {
       file: pkg.main,
       format: "cjs",
       sourcemap: true,
-      plugins: [commonjs()],
     },
     {
       file: pkg.module,
@@ -24,6 +28,12 @@ export default {
       format: "iife",
       name: "DTM",
     },
+    {
+      file: "dist/bundle.min.js",
+      format: "iife",
+      name: "DTM",
+      plugins: [terser()],
+    },
   ],
-  plugins: [typescript()],
+  plugins: [...plugins],
 };

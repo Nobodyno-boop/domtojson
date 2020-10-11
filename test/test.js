@@ -1,3 +1,3 @@
-let parser = require("../dist/index.umd")
+import parser from "../dist/index.es"
 
 console.log(parser)

@@ -10,9 +10,6 @@
     "noImplicitAny": true,
     "baseUrl": "./src",
     "removeComments": true,
-    "paths": {
-      "~*": ["./*"]
-    }
   },
   "include": ["./src/**/*"]
 }

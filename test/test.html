@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>For try</title>
+    <style>
+      .bg-g {
+        background-color: red;
+      }
+    </style>
   </head>
   <body>
     <div id="app">
@@ -13,10 +18,10 @@
         <b>quo lorem cetero epicurei id</b>, discere percipit qui ei.
       </p>
       <p>
-        Lorem ipsum dolor sit amet, quo lorem cetero epicurei id, discere
-        percipit qui ei.
+        Lorem ipsum dolor sit amet, quo lorem cetero epicurei id, discere percipit
+        qui ei.
       </p>
-      <div style="color: red;">
+      <div style="color:red;">
         <p>Lorem ipsum dolor sit amet</p>
         <br />
         <img
@@ -25,6 +30,8 @@
           alt="randomimg"
         />
       </div>
+    </div>
+
     </div>
 
     <script src="../dist/bundle.js"></script>
@@ -38,10 +45,21 @@
       // document.body.append(d)
 
       function e(e) {
-        console.log("eee");
-        let n = new DTM.Parser();
-        let c = n.toJson(document.getElementById("app"));
-        console.log(`${JSON.stringify(c)}`);
+        let n = new DTM(true, true);
+        // n.api((x) => {
+        //   return x.in({
+        //     node: "div",
+        //     value: [{ name: "class", attr: ["bg-g","txt-a", 'io-i'] },{ name: "l", attr: ["issou"] } , { name: "id" }],
+        //   })
+        // });
+
+        let c = n.toJson(document.getElementById("app")).then((x) => ap(x));
+      }
+
+      function ap(a) {
+        console.log(a);
+        let n = new DTM(true, false);
+        n.toDom(a).then((x) => console.log);
       }
     </script>
   </body>

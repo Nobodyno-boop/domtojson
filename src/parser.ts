@@ -26,7 +26,7 @@ export class Parser {
    * @param element {HTMLElement} the HTMLElement you want to json
    * @returns Json or
    */
-  toJson(element: HTMLElement): Promise<[] | String> {
+  async toJson(element: HTMLElement): Promise<[] | String> {
     return new Promise((resolve, reject) => {
       let json;
 
@@ -65,7 +65,7 @@ export class Parser {
     });
   }
 
-  toDom(json: [] | Uint8Array, element?: HTMLElement): Promise<HTMLElement> {
+  async toDom(json: [] | Uint8Array, element?: HTMLElement): Promise<HTMLElement> {
     return new Promise((resolve, reject) => {
       if (json instanceof Uint8Array) {
         ungzip(json).then((x: any) => {

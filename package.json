@@ -1,6 +1,6 @@
 {
   "name": "@poulpi/domtojson",
-  "version": "0.2.1",
+  "version": "0.2.1001",
   "description": "Simple domtojson with gzip for more optimization",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",

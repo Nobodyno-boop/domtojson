@@ -4,7 +4,7 @@ For node
 
 > npm i @poulpi/domtojson
 
-## [For browser (Click on me :rice_ball: )](https://unpkg.com/@poulpi/domtojson@latest/dist/bundle.js)
+## [For browser (Click on me :rice_ball: )](https://unpkg.com/@poulpi/domtojson@latest/dist/bundle.min.js)
 
 - [ToJson](#to-json)
 - [ToDom](#to-dom)
@@ -13,7 +13,7 @@ For node
 # Feature
 
 - Support cjs/es module
-- Browser bundle with [unpkg](https://unpkg.com/@poulpi/domtojson@latest/dist/bundle.js)
+- Bundle minify for web [unpkg](https://unpkg.com/@poulpi/domtojson@latest/dist/bundle.min.js)
 - Typescript support with type definition
 - Compression Option with gzip base64 (its really cool try it.)
 

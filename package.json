@@ -27,7 +27,10 @@
     "domparser",
     "json",
     "dom2json",
-    "json2dom"
+    "json2dom",
+    "gzipjson",
+    "gzip",
+    "domgzip"
   ],
   "author": "poulpi",
   "license": "MIT",
@@ -38,6 +41,7 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^14.0.0",
     "@types/node": "^14.0.27",
+    "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-globals": "^1.4.0",
     "rollup-plugin-node-polyfills": "^0.2.1",
@@ -45,8 +49,5 @@
     "rollup-plugin-uglify": "^6.0.4",
     "tslib": "^2.0.0",
     "typescript": "^3.9.7"
-  },
-  "dependencies": {
-    "rollup-plugin-terser": "^7.0.2"
   }
 }

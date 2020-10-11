@@ -25,6 +25,11 @@ initialise:
 let parser = new DTM(true); // with debug mod;
 
 let parser = new DTM(false, true); // without debug mod but with gzip;
+
+// module
+
+import Parser from "@poulpi/domtojson";
+const parser = new Parser();
 ```
 
 ---

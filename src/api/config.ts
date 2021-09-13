@@ -3,9 +3,7 @@ export type DNodeAttr = { name: string; attr?: string[] };
 export type DNode = { node: string; value: DNodeAttr[] };
 
 export type ConfigDefault = {
-  Helper: {
-    gzip: boolean;
-  };
+  gzip: boolean;
   logger: boolean;
 };
 
@@ -13,9 +11,20 @@ export class ParserConfig {
   private _include: Record<string, DNodeAttr[]> = {};
   constructor(
     public useApi: boolean = false,
-    public config: ConfigDefault = { Helper: { gzip: true }, logger: true }
+    public config: ConfigDefault = { gzip: true , logger: true }
   ) {}
 
+
+  /**
+   * Include attribute.
+   * ```typescript
+   * .in({"div", [{name: "data-tag"}]})  
+   * 
+   * ```
+   * 
+   * @param dn 
+   * @returns ParserConfig
+   */
   in(dn: DNode): ParserConfig {
     this.set(dn, 0);
     return this;

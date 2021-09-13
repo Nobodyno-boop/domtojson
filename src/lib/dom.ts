@@ -2,6 +2,16 @@ import { Event } from "../utils/Event";
 import { ParserConfig } from "../api/config";
 import L from "../utils/L";
 
+export type JSDomAttr = {
+  name: String,
+  value: String
+}
+export type JSDom = {
+  node: String,
+  attr?: [JSDomAttr],
+  text: String
+}
+
 export default class Dom {
   private tmpElement: any[];
   private tmpJson: any[];
@@ -142,7 +152,7 @@ export default class Dom {
     return map.length === 0 ? null : map[0];
   }
 
-  getJson(): Object {
+  getJson(): JSDom {
     return this.tmpJson;
   }
 }

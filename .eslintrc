@@ -1,0 +1,78 @@
+{
+  "env": {
+    "es6": true,
+    "jest": true,
+    "node": true
+  },
+  "ignorePatterns": [
+    "old/**"
+  ],
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [
+        ".ts"
+      ]
+    },
+    "import/resolver": {
+      "typescript": {}
+    }
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "tsconfig.json",
+    "sourceType": "module"
+  },
+  "root": true,
+  "plugins": [
+    "@typescript-eslint",
+    "fp",
+    "import"
+  ],
+  "extends": [
+    "airbnb-base",
+    "airbnb-typescript/base",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/typescript",
+    "plugin:fp/recommended"
+  ],
+  "rules": {
+    "arrow-body-style": [
+      "error",
+      "always"
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "dot-notation": "off",
+    "indent": [
+      "error",
+      2
+    ],
+    "max-len": [
+      "error",
+      100
+    ],
+    "newline-per-chained-call": [
+      "error",
+      {
+        "ignoreChainWithDepth": 1
+      }
+    ],
+    "no-tabs": "off",
+    "no-underscore-dangle": "off",
+    "semi-style": [
+      "error"
+    ],
+    "prefer-const": "off",
+    "fp/no-nil": "off",
+    "fp/no-this": "off",
+    "fp/no-throw": "off",
+    "fp/no-let": "off",
+    "fp/no-unused-expression": "off",
+    "no-mixed-spaces-and-tabs": "off",
+    "import/no-extraneous-dependencies": "off",
+    "import/prefer-default-export": "off",
+    "import/extensions": "off"
+  }
+}

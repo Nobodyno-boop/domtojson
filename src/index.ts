@@ -1,3 +1,5 @@
-import { Parser } from "./parser";
+import toJson from './parser/ToJson';
 
-export default Parser;
+export default {
+  toJson,
+};

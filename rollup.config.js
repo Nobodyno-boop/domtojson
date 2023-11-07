@@ -1,6 +1,6 @@
 import typescript from "rollup-plugin-typescript2";
 import commonjs from "@rollup/plugin-commonjs";
-import pkg from "./package.json";
+import pkg from "./package.json" assert { type: "json" };
 import globals from "rollup-plugin-node-globals";
 import builtn from "rollup-plugin-node-builtins";
 import nodePolyfills from "rollup-plugin-node-polyfills";

@@ -11,5 +11,5 @@
     "baseUrl": "./src",
     "removeComments": true,
   },
-  "include": ["./src/**/*"]
+  "include": ["src/**/*.ts"]
 }
